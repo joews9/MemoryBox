@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:title="Choose an option">
+        <menu>
+            <item
+                android:id="@+id/navTimeline"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Timeline" />
+            <item
+                android:id="@+id/navAddMemory"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Add Memory" />
+            <item
+                android:id="@+id/navCategories"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Categories" />
+            <item
+                android:id="@+id/navSearch"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Search" />
+        </menu>
+    </item>
+
+    <item android:title = "Options">
+        <menu>
+            <item
+                android:id="@+id/usersName"
+                android:title="Joe Bloggs"
+                />
+            <item
+                android:id="@+id/logOut"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Log Out"
+                />
+
+        </menu>
+
+    </item>
+
+
+</menu>
