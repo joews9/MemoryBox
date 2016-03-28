@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class LogInActivity extends AppCompatActivity {
@@ -21,7 +22,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        Button button =  (Button)findViewById(R.id.btn_login);
+        final Button button =  (Button)findViewById(R.id.btn_login);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +52,14 @@ public class LogInActivity extends AppCompatActivity {
                         if (passwordCurrent.equals(password)) {
                                 sqLiteHelper.deactivateSessions();
                                 sqLiteHelper.setActive(username);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                HashMap<String, String> currentUser = sqLiteHelper.getUserDetails(username);
+                                String firstName = currentUser.get("firstName");
+                                String lastName = currentUser.get("lastName");
+                                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("name" , firstName + " " + lastName);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                                 finish();
 
                         } else {

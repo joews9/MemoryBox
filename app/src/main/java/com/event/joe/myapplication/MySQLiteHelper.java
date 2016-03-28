@@ -285,6 +285,28 @@ public class MySQLiteHelper  extends SQLiteOpenHelper {
         return chosenEvent;
     }
 
+    public HashMap<String, String> getUserDetails(String username) {
+        HashMap<String, String> loggedInUserDetails = new HashMap<String, String>();
+        int x = 1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + "firstName, lastName FROM " + TABLE_LOGIN + " WHERE username = '" + username + "'", null);
 
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+
+                String firstName = cursor.getString(cursor.getColumnIndex(FIRSTNAME));
+                String lastName = cursor.getString(cursor.getColumnIndex(LASTNAME));
+
+                loggedInUserDetails.put("firstName", firstName);
+                loggedInUserDetails.put("lastName", lastName);
+
+
+                x = x + 1;
+                cursor.moveToNext();
+            }
+        }
+
+        return loggedInUserDetails;
+    }
 }
 

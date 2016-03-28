@@ -24,14 +24,14 @@
     </item>
 
     <item android:title = "Options">
+
         <menu>
             <item
-                android:id="@+id/usersName"
-                android:title="Joe Bloggs"
+                android:id="@+id/currentName"
+                android:title=""
                 />
             <item
                 android:id="@+id/logOut"
-                android:icon="@drawable/ic_menu_send"
                 android:title="Log Out"
                 />
 
