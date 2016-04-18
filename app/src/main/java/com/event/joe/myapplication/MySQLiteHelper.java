@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.event.joe.myapplication.com.event.joe.Memory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,29 +21,23 @@ import java.util.List;
 public class MySQLiteHelper  extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "memoriesDB";
-    private static final String TABLE_NAME = "table_event";
+    private static final String TABLE_NAME = "table_memory";
     private static final String KEY_ID = "id";
-    private static final String LATITUDE = "latitude";
-    private static final String LONGITUDE = "longitude";
     private static final String DATE = "date";
     private static final String TITLE = "title";
     private static final String LOCATION = "location";
-    private static final String TICKET_URL = "ticketURL";
     private static final String IMAGE_URL = "imageURL";
-    private static final String POSTCODE = "postcode";
+    private static final String DESCRIPTION = "description";
 
     //  private static final String[] COLUMNS = {KEY_ID,KEY_PC1,KEY_PC2};
 
     private SQLiteDatabase db;
     private String idChosenEvent;
-    private String longitude;
-    private String latitude;
     private String date;
     private String title;
+    private String description;
     private String location;
     private String imageURL;
-    private String postcode;
-    private String ticketURL;
     private JSONObject event;
     private String id;
 
@@ -59,7 +55,7 @@ public class MySQLiteHelper  extends SQLiteOpenHelper {
     private static final String ID = "id";
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
-    private static final String CREATE_EVENTS_TABLE = "CREATE TABLE table_event ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "latitude TEXT," + "longitude TEXT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "postcode TEXT," + "ticketURL TEXT )";
+    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT )";
 
 
     public MySQLiteHelper(Context context) {
@@ -69,12 +65,12 @@ public class MySQLiteHelper  extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_LOGIN_TABLE);
-        db.execSQL(CREATE_EVENTS_TABLE);
+        db.execSQL(CREATE_MEMORY_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXSISTS table_event");
+        db.execSQL("DROP TABLE IF EXSISTS table_memory");
         db.execSQL("DROP TABLE IF EXSISTS table_login");
         onCreate(db);
     }
@@ -149,33 +145,19 @@ public class MySQLiteHelper  extends SQLiteOpenHelper {
 
     }
 
-    public void saveEvent(JSONObject event) {
-        this.event = event;
-
-        //set the variables from the JSONObject
-        try {
-            latitude = event.getString("latitude");
-            longitude = event.getString("longitude");
-            date = event.getString("start_time");
-            location = event.getString("venue_name");
-            title = event.getString("title");
-            ticketURL = event.getString("url");
-            imageURL = event.getJSONObject("image").getJSONObject("medium").getString("url");
-            postcode = event.getString("postal_code");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void saveMemory(Memory memory) {
+            date = memory.getMemoryDate().toString();
+            description = memory.getDescription();
+            location = memory.getLocation();
+            title = memory.getTitle();
+            imageURL = memory.getImageResource();
 
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(LATITUDE, latitude);
-        values.put(LONGITUDE, longitude);
         values.put(DATE, date);
         values.put(TITLE, title);
         values.put(LOCATION, location);
         values.put(IMAGE_URL, imageURL);
-        values.put(POSTCODE, postcode);
-        values.put(TICKET_URL, ticketURL);
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
@@ -249,40 +231,39 @@ public class MySQLiteHelper  extends SQLiteOpenHelper {
         return list;
     }
 
-    public HashMap<String, String> getChosenEvent(String idChosenEvent) {
-        HashMap<String, String> chosenEvent = new HashMap<String, String>();
+    public ArrayList<HashMap<String, String>> getAllMemories() {
+
+        ArrayList<HashMap<String, String>> memories = new ArrayList<>();
         this.idChosenEvent = idChosenEvent;
         int x = 1;
+        int i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + "title, date, location, latitude, longitude, imageURL, ticketURL, postcode FROM " + TABLE_NAME + " WHERE id = '" + idChosenEvent + "'", null);
-
+        Cursor cursor = db.rawQuery("SELECT date, title, imageURL, location  FROM " + TABLE_NAME, null);
+        HashMap<String, String> chosenMemory = new HashMap<String, String>();
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
+                String memoryTitle = cursor.getString(cursor.getColumnIndex(TITLE));
+                String memoryDate = cursor.getString(cursor.getColumnIndex(DATE));
+                String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
+                String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
+                chosenMemory.put("title", memoryTitle);
+                chosenMemory.put("date", memoryDate);
+                chosenMemory.put("location", memoryLocation);
+                chosenMemory.put("imageURL", memoryImage);
 
-                String titleEvent = cursor.getString(cursor.getColumnIndex(TITLE));
-                String dateEvent = cursor.getString(cursor.getColumnIndex(DATE));
-                String locationEvent = cursor.getString(cursor.getColumnIndex(LOCATION));
-                String latitudeEvent = cursor.getString(cursor.getColumnIndex(LATITUDE));
-                String longitudeEvent = cursor.getString(cursor.getColumnIndex(LONGITUDE));
-                String imageURLEvent = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
-                String ticketURLEvent = cursor.getString(cursor.getColumnIndex(TICKET_URL));
-                String postcodeEvent = cursor.getString(cursor.getColumnIndex(POSTCODE));
 
-                chosenEvent.put("title", titleEvent);
-                chosenEvent.put("date", dateEvent);
-                chosenEvent.put("location", locationEvent);
-                chosenEvent.put("latitude", latitudeEvent);
-                chosenEvent.put("longitude", longitudeEvent);
-                chosenEvent.put("imageURL", imageURLEvent);
-                chosenEvent.put("ticketURL", ticketURLEvent);
-                chosenEvent.put("postcode", postcodeEvent);
-
+                memories.add(i, chosenMemory);
+                chosenMemory.clear();
+                HashMap<String, String > testMap = memories.get(i);
+                //TODO: Sort out problem with the array list
+                System.out.println("SQLITE*******" + testMap.get("title"));
+                i++;
                 x = x + 1;
                 cursor.moveToNext();
             }
         }
 
-        return chosenEvent;
+        return memories;
     }
 
     public HashMap<String, String> getUserDetails(String username) {

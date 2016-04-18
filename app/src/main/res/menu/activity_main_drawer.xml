@@ -6,19 +6,19 @@
         <menu>
             <item
                 android:id="@+id/navTimeline"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_timeline"
                 android:title="Timeline" />
             <item
                 android:id="@+id/navAddMemory"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_add_memory"
                 android:title="Add Memory" />
             <item
                 android:id="@+id/navCategories"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_categories"
                 android:title="Categories" />
             <item
                 android:id="@+id/navSearch"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/searchicon"
                 android:title="Search" />
         </menu>
     </item>
