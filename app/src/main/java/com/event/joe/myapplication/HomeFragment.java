@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment {
                 //clear quick memory edit text
                 quickMemory.getText().clear();
                 setList();
+                System.out.println("Testing Git");
             }
         });
 
