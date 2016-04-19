@@ -28,7 +28,8 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //sign in logic
 //                EditText etUsername = (EditText) findViewById(R.id.input_username);
-//                EditText etPassword = (EditText) findViewById(R.id.input_password);
+//                EditT
+// ext etPassword = (EditText) findViewById(R.id.input_password);
 //
 //                String password = etPassword.getText().toString();
 //                String username = etUsername.getText().toString();
