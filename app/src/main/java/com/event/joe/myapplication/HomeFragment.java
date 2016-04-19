@@ -22,6 +22,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Joe Millership on 27/03/2016.
@@ -35,7 +37,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        view = inflater.inflate(R.layout.timeline_layout, container, false);
         mySQLiteHelper = new MySQLiteHelper(getActivity());
-       // setList();
+        setList();
 
         Button btnQuickPost = (Button)view.findViewById(R.id.btnAddTimeline);
         btnQuickPost.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +52,6 @@ public class HomeFragment extends Fragment {
 
                 //save memory in database
                 mySQLiteHelper.saveMemory(memory);
-                Toast.makeText(getActivity(), "Memory Saved", Toast.LENGTH_SHORT).show();
                 System.out.println("goe");
                 //clear quick memory edit text
                 quickMemory.getText().clear();
@@ -63,18 +64,19 @@ public class HomeFragment extends Fragment {
 
     }
     public void setList() {
-        ArrayList<HashMap<String, String>> array = mySQLiteHelper.getAllMemories();
+        List<Map<String, String>> array = mySQLiteHelper.getAllMemories();
         ListView lv = (ListView)view.findViewById(R.id.list_timeline);
         MemoryListAdapter itemsAdapter = new MemoryListAdapter(getActivity().getApplicationContext(), R.layout.memory_list_cell);
         lv.setAdapter(itemsAdapter);
 
+        HashMap<String, String> test = new HashMap<>();
+
         for(int i = 0; i < array.size(); i++){
-            HashMap<String, String> currentMemory = array.get(i);
+            Map<String, String> currentMemory = array.get(i);
             //TODO: Remove system outs and toasts
             System.out.println("********" + currentMemory);
             String title = currentMemory.get("title");
             String date = currentMemory.get("date");
-            Toast.makeText(getActivity(), title + " dfghjkl " + date, Toast.LENGTH_SHORT).show();
             MemoryListDetailProvider memoryData = new MemoryListDetailProvider(title, date);
             itemsAdapter.add(memoryData);
         }
