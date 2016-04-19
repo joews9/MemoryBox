@@ -56,7 +56,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_LOGIN = "table_login";
     private static final String ACTIVITY = "activity";
     private static final String ID = "id";
-    private List<Map<String, String>> memories = new ArrayList<Map<String, String>>();
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
     private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT )";
@@ -235,43 +234,30 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public List<Map<String, String>> getAllMemories() {
+    public List<Memory> getAllMemories() {
+        List<Memory> memories = new ArrayList<Memory>();
         int x = 1;
         int i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT date, title, imageURL, location  FROM " + TABLE_NAME, null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                HashMap<String, String> chosenMemory = new HashMap<String, String>();
 
                 String memoryTitle = cursor.getString(cursor.getColumnIndex(TITLE));
                 String memoryDate = cursor.getString(cursor.getColumnIndex(DATE));
                 String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
                 String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
 
-                chosenMemory.put("title", memoryTitle);
-                chosenMemory.put("date", memoryDate);
-                chosenMemory.put("location", memoryLocation);
-                chosenMemory.put("imageURL", memoryImage);
-
-                memories.add(chosenMemory);
-//                Map<String, String> testMap;
-//                testMap = memories.get(i);
-//                System.out.println("Before Loop****************" + testMap.get("title"));
-                //System.out.println(memories.toString());
+                Memory memory = new Memory("Description", memoryDate, memoryLocation, memoryImage, memoryTitle);
+                memories.add(memory);
                 //TODO: Sort out problem with the array list
+                Memory testMemory = memories.get(i);
+                System.out.println("********************" + testMemory.getTitle() + testMemory.getMemoryDate());
                 i++;
                 x = x + 1;
                 cursor.moveToNext();
-                chosenMemory.clear();
+                System.out.println("CHEEESESCHEHFLESHGLAERDJSBLDSAJGLDSFJ");
 
-            }
-
-            int t = 0;
-            while(t < memories.size())
-            {
-                System.out.println(memories.get(t).toString());
-                t++;
             }
         }
        // System.out.println(memories.toString());

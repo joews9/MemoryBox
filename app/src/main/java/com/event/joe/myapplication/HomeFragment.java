@@ -12,16 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.event.joe.myapplication.com.event.joe.Memory;
 import com.event.joe.myapplication.com.event.joe.listadapter.MemoryListAdapter;
 import com.event.joe.myapplication.com.event.joe.listadapter.MemoryListDetailProvider;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,16 +30,16 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       view = inflater.inflate(R.layout.timeline_layout, container, false);
+        view = inflater.inflate(R.layout.timeline_layout, container, false);
         mySQLiteHelper = new MySQLiteHelper(getActivity());
         setList();
 
-        Button btnQuickPost = (Button)view.findViewById(R.id.btnAddTimeline);
+        Button btnQuickPost = (Button) view.findViewById(R.id.btnAddTimeline);
         btnQuickPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //get quick memory text from the edit text
-                EditText quickMemory = (EditText)view.findViewById(R.id.etQuickPost);
+                EditText quickMemory = (EditText) view.findViewById(R.id.etQuickPost);
                 String quickMemoryText = quickMemory.getText().toString();
 
                 //create a memory using only description
@@ -63,20 +58,20 @@ public class HomeFragment extends Fragment {
         return view;
 
     }
+
     public void setList() {
-        List<Map<String, String>> array = mySQLiteHelper.getAllMemories();
-        ListView lv = (ListView)view.findViewById(R.id.list_timeline);
+        List<Memory> array = mySQLiteHelper.getAllMemories();
+        ListView lv = (ListView) view.findViewById(R.id.list_timeline);
         MemoryListAdapter itemsAdapter = new MemoryListAdapter(getActivity().getApplicationContext(), R.layout.memory_list_cell);
         lv.setAdapter(itemsAdapter);
 
-        HashMap<String, String> test = new HashMap<>();
 
-        for(int i = 0; i < array.size(); i++){
-            Map<String, String> currentMemory = array.get(i);
-            //TODO: Remove system outs and toasts
-            System.out.println("********" + currentMemory);
-            String title = currentMemory.get("title");
-            String date = currentMemory.get("date");
+        for (int i = 0; i < array.size(); i++) {
+            //TODO: fix this
+            Memory currentMemory = array.get(i);
+            System.out.println("HOME FRAGMENT " + currentMemory.getTitle());
+            String title = (currentMemory.getTitle());
+            String date = (currentMemory.getMemoryDate());
             MemoryListDetailProvider memoryData = new MemoryListDetailProvider(title, date);
             itemsAdapter.add(memoryData);
         }

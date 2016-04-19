@@ -5,8 +5,12 @@ import com.event.joe.myapplication.com.event.joe.Memory;
 /**
  * Created by Joe Millership on 19/04/2016.
  */
-public class MemoryRetreived extends Memory
-{
+public class MemoryRetreived extends Memory {
+
+    private String location;
+    private String imageResource;
+    private String title;
+    private String desccription;
     public MemoryRetreived(String description) {
         super(description);
     }

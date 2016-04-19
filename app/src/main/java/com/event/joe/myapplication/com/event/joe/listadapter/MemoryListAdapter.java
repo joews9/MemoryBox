@@ -19,6 +19,7 @@ import java.util.List;
  * Created by Joe Millership on 16/04/2016.
  */
 public class MemoryListAdapter extends ArrayAdapter {
+
     List list = new ArrayList();
 
     public MemoryListAdapter(Context context, int resource) {
@@ -68,14 +69,14 @@ public class MemoryListAdapter extends ArrayAdapter {
         }else{
             handler = (DataHandler)row.getTag();
         }
-        MemoryListDetailProvider eventProvider = (MemoryListDetailProvider)this.getItem(position);
-        Toast.makeText(getContext(), eventProvider.getMemoryDate() + " " + eventProvider.getMemoryTitle(), Toast.LENGTH_SHORT).show();
+        MemoryListDetailProvider memoryProvider = (MemoryListDetailProvider)this.getItem(position);
         handler.eventDate.setText("25/06/2016");
-        handler.eventTitle.setText("Quick Memory");
+        handler.eventTitle.setText("Event Title");
         handler.eventDate.setText("25/06/2016");
         handler.eventLocation.setText("Walsall");
-        handler.clickSeeMore.setText("Click to see more...");
-        //handler.eventDate.setText(eventProvider.getMemoryDate());
+        handler.clickSeeMore.setText("Tap to see more...");
+        handler.eventDate.setText(memoryProvider.getMemoryDate());
+
 
 
         return row;

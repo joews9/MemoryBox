@@ -9,9 +9,10 @@ public class MemoryListDetailProvider {
     private String memoryTitle;
     private String memoryDate;
 
-    public MemoryListDetailProvider(String memoryDate, String memoryTitle){
+    public MemoryListDetailProvider(String memoryTitle, String memoryDate){
         this.setMemoryDate(this.memoryDate);
         this.setMemoryTitle(this.memoryTitle);
+        System.out.println("Memory List Detail Provider" + memoryTitle);
     }
 
     public String getMemoryTitle() {
