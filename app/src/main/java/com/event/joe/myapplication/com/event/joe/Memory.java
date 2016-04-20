@@ -13,10 +13,10 @@ import java.util.GregorianCalendar;
  */
 public class Memory {
     private String description;
-    private String memoryDate = null;
+    private String memoryDate;;
     private String title;
-    private String location = null;
-    private String imageResource = null;
+    private String location;
+    private String imageResource;
 
     public Memory(String description){
         this.description = description;
