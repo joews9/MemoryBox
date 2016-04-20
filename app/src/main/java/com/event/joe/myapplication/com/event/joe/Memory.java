@@ -37,7 +37,7 @@ public class Memory {
 
     public static String getLocation() {
         if(location == null){
-            location = "Home";
+            return "Home"
         }
         return location;
     }
