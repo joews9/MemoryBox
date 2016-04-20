@@ -12,11 +12,11 @@ import java.util.GregorianCalendar;
  * Created by Joe Millership on 17/04/2016.
  */
 public class Memory {
-    private static String description;
-    private static String memoryDate = null;
-    private static String title;
-    private static String location = null;
-    private static String imageResource = null;
+    private String description;
+    private String memoryDate = null;
+    private String title;
+    private String location = null;
+    private String imageResource = null;
 
     public Memory(String description){
         this.description = description;
