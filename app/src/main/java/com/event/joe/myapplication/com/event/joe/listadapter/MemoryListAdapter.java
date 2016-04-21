@@ -29,8 +29,6 @@ public class MemoryListAdapter extends ArrayAdapter {
     static class DataHandler{
         TextView eventTitle;
         TextView eventDate;
-        TextView eventLocation;
-        TextView clickSeeMore;
 
 
     }
@@ -60,23 +58,16 @@ public class MemoryListAdapter extends ArrayAdapter {
             LayoutInflater inflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.memory_list_cell, parent, false);
             handler = new DataHandler();
-            handler.eventDate = (TextView)row.findViewById(R.id.date_item);
-            handler.eventTitle = (TextView)row.findViewById(R.id.title_item);
-            handler.eventLocation = (TextView)row.findViewById(R.id.location_item);
-            handler.clickSeeMore = (TextView)row.findViewById(R.id.see_more_item);
+            handler.eventDate = (TextView)row.findViewById(R.id.title_item);
+            handler.eventTitle = (TextView)row.findViewById(R.id.date_item);
             row.setTag(handler);
 
         }else{
             handler = (DataHandler)row.getTag();
         }
-        MemoryListDetailProvider memoryProvider = (MemoryListDetailProvider)this.getItem(position);
-        handler.eventDate.setText("25/06/2016");
-        handler.eventTitle.setText("Event Title");
-        handler.eventDate.setText("25/06/2016");
-        handler.eventLocation.setText("Walsall");
-        handler.clickSeeMore.setText("Tap to see more...");
-        handler.eventDate.setText(memoryProvider.getMemoryDate());
-
+        MemoryListDetailProvider eventProvider = (MemoryListDetailProvider)this.getItem(position);
+        handler.eventTitle.setText(eventProvider.getEventTitle());
+        handler.eventDate.setText(eventProvider.getEventDate());
 
 
         return row;

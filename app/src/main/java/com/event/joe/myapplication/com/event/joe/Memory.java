@@ -12,22 +12,23 @@ import java.util.GregorianCalendar;
  * Created by Joe Millership on 17/04/2016.
  */
 public class Memory {
-    private static String description;
-    private static String memoryDate = null;
-    private static String title;
-    private static String location = null;
-    private static String imageResource = null;
+    private String description;
+    private String memoryDate;
+    private String title;
+    private String location;
+    private String imageResource;
+    private String id;
 
     public Memory(String description){
         this.description = description;
         this.title = description.trim();
     }
 
-    public static String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public static String getMemoryDate() {
+    public String getMemoryDate() {
         if (memoryDate == null){
             DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy");
             memoryDate = df.format(Calendar.getInstance().getTime());
@@ -35,21 +36,29 @@ public class Memory {
         return memoryDate;
     }
 
-    public static String getLocation() {
+    public String getLocation() {
         if(location == null){
             location = "Home";
         }
         return location;
     }
 
-    public static String getImageResource() {
+    public void setId(String id){
+        this.id = id;
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public String getImageResource() {
         if(imageResource == null){
             imageResource = "none";
         }
         return imageResource;
     }
 
-    public static String getTitle() {
+    public String getTitle() {
         return title;
     }
 

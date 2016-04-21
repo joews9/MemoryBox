@@ -6,28 +6,27 @@ import com.event.joe.myapplication.com.event.joe.Memory;
  * Created by Joe Millership on 16/04/2016.
  */
 public class MemoryListDetailProvider {
-    private String memoryTitle;
-    private String memoryDate;
+    private String eventTitle;
+    private String eventDate;
 
-    public MemoryListDetailProvider(String memoryTitle, String memoryDate){
-        this.setMemoryDate(this.memoryDate);
-        this.setMemoryTitle(this.memoryTitle);
-        System.out.println("Memory List Detail Provider" + memoryTitle);
+    public MemoryListDetailProvider(String eventTitle, String eventDate) {
+        this.setEventDate(eventDate);
+        this.setEventTitle(eventTitle);
     }
 
-    public String getMemoryTitle() {
-        return memoryTitle;
+    public String getEventTitle() {
+        return eventTitle;
     }
 
-    public void setMemoryTitle(String memoryTitle) {
-        this.memoryTitle = memoryTitle;
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
     }
 
-    public String getMemoryDate() {
-        return memoryDate;
+    public String getEventDate() {
+        return eventDate;
     }
 
-    public void setMemoryDate(String memoryDate) {
-        this.memoryDate = memoryDate;
+    public void setEventDate(String eventDate) {
+        this.eventDate = eventDate;
     }
 }
