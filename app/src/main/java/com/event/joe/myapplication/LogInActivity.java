@@ -27,55 +27,52 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //sign in logic
-//                EditText etUsername = (EditText) findViewById(R.id.input_username);
-//                EditT
-// ext etPassword = (EditText) findViewById(R.id.input_password);
-//
-//                String password = etPassword.getText().toString();
-//                String username = etUsername.getText().toString();
-//
-//                sqLiteHelper = new MySQLiteHelper(LogInActivity.this);
-//                List<String> usernames = sqLiteHelper.getAllUsernames();
-//                boolean userNameFound = false;
-//
-//                for (int i = 0; i < usernames.size(); i++) {
-//                    if (usernames.get(i).equals(username)) {
-//                        userNameFound = true;
-//                        break;
-//                    }
-//                }
-//
-//                if (username.length() < 1 || password.length() < 1) {
-//                    Toast.makeText(LogInActivity.this, "Not all fields have been filled in", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    if (userNameFound) {
-//                        String passwordCurrent = sqLiteHelper.getPassword(username);
-//                        if (passwordCurrent.equals(password)) {
-//                                sqLiteHelper.deactivateSessions();
-//                                sqLiteHelper.setActive(username);
-//                                HashMap<String, String> currentUser = sqLiteHelper.getUserDetails(username);
-//                                String firstName = currentUser.get("firstName");
-//                                String lastName = currentUser.get("lastName");
-//                                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-//                                Bundle bundle = new Bundle();
-//                                bundle.putString("name" , firstName + " " + lastName);
-//                                intent.putExtras(bundle);
-//                                startActivity(intent);
-//                                finish();
-//
-//                        } else {
-//                            Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
-//                        }
-//                    } else {
-//                        Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
-//                        etUsername.getText().clear();
-//                        etPassword.getText().clear();
-//                    }
-//
-//                }
+                EditText etUsername = (EditText) findViewById(R.id.input_username);
+                EditText etPassword = (EditText) findViewById(R.id.input_password);
 
-                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-                startActivity(intent);
+                String password = etPassword.getText().toString();
+                String username = etUsername.getText().toString();
+
+                sqLiteHelper = new MySQLiteHelper(LogInActivity.this);
+                List<String> usernames = sqLiteHelper.getAllUsernames();
+                boolean userNameFound = false;
+
+                for (int i = 0; i < usernames.size(); i++) {
+                    if (usernames.get(i).equals(username)) {
+                        userNameFound = true;
+                        break;
+                    }
+                }
+
+                if (username.length() < 1 || password.length() < 1) {
+                    Toast.makeText(LogInActivity.this, "Not all fields have been filled in", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (userNameFound) {
+                        String passwordCurrent = sqLiteHelper.getPassword(username);
+                        if (passwordCurrent.equals(password)) {
+                                sqLiteHelper.deactivateSessions();
+                                sqLiteHelper.setActive(username);
+                                HashMap<String, String> currentUser = sqLiteHelper.getUserDetails(username);
+                                String firstName = currentUser.get("firstName");
+                                String lastName = currentUser.get("lastName");
+                                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("username" , firstName + " " + lastName);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
+
+                        } else {
+                            Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
+                        etUsername.getText().clear();
+                        etPassword.getText().clear();
+                    }
+
+                }
+
             }
         });
 

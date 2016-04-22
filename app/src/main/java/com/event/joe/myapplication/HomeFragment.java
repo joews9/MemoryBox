@@ -81,11 +81,7 @@ public class HomeFragment extends Fragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                ViewMemoryFragment vmf = new ViewMemoryFragment();
-                fragmentTransaction.add(R.id.fragmentPlaceHolder, vmf);
-                fragmentTransaction.commit();
+                Toast.makeText(getActivity(), "List Item" + position, Toast.LENGTH_SHORT).show();
             }
         });
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

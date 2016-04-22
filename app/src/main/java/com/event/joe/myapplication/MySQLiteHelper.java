@@ -51,6 +51,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private String username;
     private String password;
     private static final String PASSWORD = "password";
+    private static final String CATEGORY = "category";
     private static final String USERNAME = "username";
     private static final String FIRSTNAME = "firstName";
     private static final String LASTNAME = "lastName";
@@ -59,7 +60,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String ID = "id";
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
-    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT )";
+    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT + category TEXT )";
 
 
     public MySQLiteHelper(Context context) {
@@ -77,6 +78,42 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXSISTS table_memory");
         db.execSQL("DROP TABLE IF EXSISTS table_login");
         onCreate(db);
+    }
+
+    public void deactivateSessions() {
+        String deleteQuery = "UPDATE " + TABLE_LOGIN + " SET activity = 'inactive'";
+        db = this.getWritableDatabase();
+        db.execSQL(deleteQuery);
+
+    }
+
+    public void setActive(String username) {
+        String deleteQuery = "UPDATE " + TABLE_LOGIN + " SET activity = 'active' WHERE username = '" + username + "'";
+        db = this.getWritableDatabase();
+        db.execSQL(deleteQuery);
+
+    }
+
+    public HashMap<String, String> getUserDetails(String username) {
+        HashMap<String, String> loggedInUserDetails = new HashMap<String, String>();
+        int x = 1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + "firstName, lastName FROM " + TABLE_LOGIN + " WHERE username = '" + username + "'", null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+
+                String firstName = cursor.getString(cursor.getColumnIndex(FIRSTNAME));
+                String lastName = cursor.getString(cursor.getColumnIndex(LASTNAME));
+
+                loggedInUserDetails.put("firstName", firstName);
+                loggedInUserDetails.put("lastName", lastName);
+
+                x = x + 1;
+                cursor.moveToNext();
+            }
+        }
+        return loggedInUserDetails;
     }
 
     public String addUser(String username, String password, String firstName, String lastName) {

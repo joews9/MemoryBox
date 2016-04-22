@@ -3,10 +3,81 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
-        android:hint="Add Memory"
+        android:text="Add a Memory"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:textColor="#9acc55"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:hint="Click to add date"
         android:id="@+id/memory_date"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:hint="Add a title"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:hint="Add a description"
+        android:layout_height="100dp" />
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:hint="Add a location"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Add Photo to Memory"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginRight="50dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:layout_width="50dp"
+            android:background="@drawable/camera"
+            android:layout_gravity="center"
+            android:id="@+id/btnCamera"
+            android:layout_height="50dp" />
+
+    </LinearLayout>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:id="@+id/spinnerCat"
+        android:entries="@array/spinnerCategorys"/>
+    <Button
+        android:layout_width="match_parent"
+        android:text="Add Memory"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

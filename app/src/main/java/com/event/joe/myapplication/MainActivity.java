@@ -35,14 +35,24 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.fragmentPlaceHolder, hf);
         fragmentTransaction.commit();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+/*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_username = menu.findItem(R.id.currentName);
+        String username = getIntent().getExtras().getString("username");
+        nav_username.setTitle(username);
+
+
     }
 
     @Override
@@ -115,6 +125,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             finish();
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
