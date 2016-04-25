@@ -16,6 +16,7 @@ public class Memory {
     private String memoryDate;
     private String title;
     private String location;
+    private String category;
     private String imageResource;
     private String id;
 
@@ -38,7 +39,7 @@ public class Memory {
 
     public String getLocation() {
         if(location == null){
-            location = "Home";
+            location = "No Location Set";
         }
         return location;
     }
@@ -62,8 +63,14 @@ public class Memory {
         return title;
     }
 
-    public Memory(String description, String memoryDate, String location, String imageResource, String title){
+    public String getCategory() {
+        return category;
+    }
+
+    public Memory(String description, String memoryDate, String location, String imageResource, String title, String category){
        this.description = description;
+        this.category = category;
+
        this.memoryDate = memoryDate;
        this.location = location;
        this.imageResource = imageResource;

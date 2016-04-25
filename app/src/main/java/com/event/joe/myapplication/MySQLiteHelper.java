@@ -60,7 +60,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String ID = "id";
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
-    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT + category TEXT )";
+    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT," + "category TEXT )";
 
 
     public MySQLiteHelper(Context context) {
@@ -199,7 +199,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         int x = 1;
         int i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location  FROM " + TABLE_NAME + " ORDER BY date DESC", null);
+        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category  FROM " + TABLE_NAME + " ORDER BY date DESC", null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
 
@@ -208,8 +208,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
                 String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
                 String memoryId = cursor.getString(cursor.getColumnIndex(ID));
+                String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
 
-                Memory memory = new Memory("Description", memoryDate, memoryLocation, memoryImage, memoryTitle);
+                Memory memory = new Memory("Description", memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory);
                 memory.setId(memoryId);
                 memories.add(memory);
                 //TODO: Sort out problem with the array list

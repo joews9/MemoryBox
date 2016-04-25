@@ -8,16 +8,10 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="spinnerCategorys">
-        <item>All</item>
-        <item>Art</item>
-        <item>Attractions</item>
-        <item>Animal</item>
-        <item>Food</item>
-        <item>Music</item>
-        <item>Sales</item>
-        <item>Science</item>
-        <item>Sports</item>
-        <item>Technology</item>
+        <item>New Item</item>
+        <item>Achievement</item>
+        <item>Secret</item>
+        <item>Family</item>
         <item>Other</item>
     </string-array>
 </resources>

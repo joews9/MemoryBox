@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.event.joe.myapplication.R;
 
@@ -27,8 +26,9 @@ public class MemoryListAdapter extends ArrayAdapter {
     }
 
     static class DataHandler{
-        TextView eventTitle;
-        TextView eventDate;
+        TextView memoryTitle;
+        TextView memoryDate;
+        TextView memoryLocation;
 
 
     }
@@ -58,16 +58,18 @@ public class MemoryListAdapter extends ArrayAdapter {
             LayoutInflater inflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.memory_list_cell, parent, false);
             handler = new DataHandler();
-            handler.eventDate = (TextView)row.findViewById(R.id.title_item);
-            handler.eventTitle = (TextView)row.findViewById(R.id.date_item);
+            handler.memoryDate = (TextView)row.findViewById(R.id.title_item);
+            handler.memoryTitle = (TextView)row.findViewById(R.id.date_item);
+            handler.memoryLocation = (TextView)row.findViewById(R.id.location_item);
             row.setTag(handler);
 
         }else{
             handler = (DataHandler)row.getTag();
         }
         MemoryListDetailProvider eventProvider = (MemoryListDetailProvider)this.getItem(position);
-        handler.eventTitle.setText(eventProvider.getEventTitle());
-        handler.eventDate.setText(eventProvider.getEventDate());
+        handler.memoryTitle.setText(eventProvider.getMemoryTitle());
+        handler.memoryDate.setText(eventProvider.getMemoryDate());
+        handler.memoryLocation.setText(eventProvider.getMemoryLocation());
 
 
         return row;
