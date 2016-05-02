@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
-
+///TODO: Logged In Session Shared Preferences
     private String firstName;
     private String lastName;
     private String username;

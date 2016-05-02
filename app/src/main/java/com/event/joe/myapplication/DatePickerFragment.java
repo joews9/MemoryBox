@@ -55,8 +55,8 @@ public class DatePickerFragment extends DialogFragment
             date = format.parse(string);
             System.out.println("DATE***************" + date);
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy");
-            String datNewe  = sdf.format(date);
-            System.out.println("New Date**********" + datNewe);
+            dateNew  = sdf.format(date);
+            System.out.println("New Date**********" + dateNew);
         } catch (ParseException e) {
             e.printStackTrace();
         }

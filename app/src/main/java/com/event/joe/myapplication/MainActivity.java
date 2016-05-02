@@ -18,9 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.event.joe.myapplication.com.event.joe.Memory;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header=navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
 /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
 
 
@@ -51,13 +52,10 @@ public class MainActivity extends AppCompatActivity
         MenuItem nav_username = menu.findItem(R.id.currentName);
         String username = getIntent().getExtras().getString("username");
         nav_username.setTitle(username);
-
-
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
 
 
         return true;
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         String name = getIntent().getExtras().getString("name");
-        TextView tv = (TextView)findViewById(R.id.tvName);
+        TextView tv = (TextView) findViewById(R.id.tvName);
         tv.setText(name);
         /**
          * NExt Step
@@ -120,7 +118,7 @@ public class MainActivity extends AppCompatActivity
             CategoryFragment hf = new CategoryFragment();
             fragmentTransaction.replace(R.id.fragmentPlaceHolder, hf);
             fragmentTransaction.commit();
-        } else if(id == R.id.logOut){
+        } else if (id == R.id.logOut) {
             Intent intent = new Intent(MainActivity.this, LogInActivity.class);
             startActivity(intent);
             finish();
@@ -131,4 +129,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

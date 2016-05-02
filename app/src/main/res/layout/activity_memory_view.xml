@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#9acc55"
+        android:layout_marginTop="5dp"
+        android:textSize="30dp"
+        android:text="Richard the Dog"
+        android:id="@+id/tvMemoryTitle"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:text="Friday 25th December 2015"
+        android:id="@+id/tvMemoryDate"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="Birmingham"
+        android:id="@+id/tvMemoryLocation"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Today has been a great day we got a new dog, i decided to name him Richard after grandad. He’s a bit nervous at the moment but i think he will get used to us. Love my new doggy!"
+        android:textSize="20dp"
+        android:gravity="center|top"
+        android:id="@+id/tvMemoryDescription"/>
+    <ImageView
+        android:gravity="center"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/ivMemoryImage"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>

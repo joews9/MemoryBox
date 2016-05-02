@@ -41,7 +41,6 @@
     </LinearLayout>
     <ImageView
         android:layout_width="75dp"
-        android:background="@drawable/ic_quick_memory"
         android:layout_height="75dp"
         android:id="@+id/iv_memory"
         android:layout_alignBottom="@+id/layoutMainContent"

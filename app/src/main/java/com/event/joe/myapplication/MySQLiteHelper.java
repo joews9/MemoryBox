@@ -33,34 +33,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String IMAGE_URL = "imageURL";
     private static final String DESCRIPTION = "description";
 
-    //  private static final String[] COLUMNS = {KEY_ID,KEY_PC1,KEY_PC2};
-
     private SQLiteDatabase db;
-    private String idChosenEvent;
-    private String date;
-    private String title;
-    private String description;
-    private String location;
-    private String imageURL;
-    private JSONObject event;
-    private String id;
 
     //Login Table
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
     private static final String PASSWORD = "password";
     private static final String CATEGORY = "category";
     private static final String USERNAME = "username";
     private static final String FIRSTNAME = "firstName";
     private static final String LASTNAME = "lastName";
+    private static final String SMALLIMAGE = "smallImageURL";
     private static final String TABLE_LOGIN = "table_login";
     private static final String ACTIVITY = "activity";
     private static final String ID = "id";
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
-    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT," + "category TEXT )";
+    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT," + "category TEXT, smallImageURL TEXT )";
 
 
     public MySQLiteHelper(Context context) {
@@ -117,12 +104,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     public String addUser(String username, String password, String firstName, String lastName) {
-
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USERNAME, username);
@@ -171,16 +152,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return List;
     }
     public void saveMemory(Memory memory) {
-        date = memory.getMemoryDate().toString();
-        description = memory.getDescription();
-        location = memory.getLocation();
-        title = memory.getTitle();
-        imageURL = memory.getImageResource();
+        String date = memory.getMemoryDate().toString();
+        String description = memory.getDescription();
+        String location = memory.getLocation();
+        String title = memory.getTitle();
+        String smallImage = memory.getSmallImageResource();
+        String imageURL = memory.getImageResource();
 
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DATE, date);
         values.put(TITLE, title);
+        values.put(DESCRIPTION, description);
+        values.put(SMALLIMAGE, smallImage);
         values.put(LOCATION, location);
         values.put(IMAGE_URL, imageURL);
         db.insert(TABLE_NAME, null, values);
@@ -199,7 +183,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         int x = 1;
         int i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category  FROM " + TABLE_NAME + " ORDER BY date DESC", null);
+        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category, smallImageURL, description  FROM " + TABLE_NAME + " ORDER BY date DESC", null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
 
@@ -209,13 +193,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
                 String memoryId = cursor.getString(cursor.getColumnIndex(ID));
                 String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
+                String memorySmallImage = cursor.getString(cursor.getColumnIndex(SMALLIMAGE));
+                String memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
 
-                Memory memory = new Memory("Description", memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory);
+                Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage);
                 memory.setId(memoryId);
                 memories.add(memory);
-                //TODO: Sort out problem with the array list
-                Memory testMemory = memories.get(i);
-                System.out.println("********************" + testMemory.getTitle() + testMemory.getMemoryDate());
                 i++;
                 x = x + 1;
                 cursor.moveToNext();

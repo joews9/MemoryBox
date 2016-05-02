@@ -17,5 +17,6 @@ public class CategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.categories_layout, container, false);
         return view;
 
+        //TODO: Category Fragment
     }
 }

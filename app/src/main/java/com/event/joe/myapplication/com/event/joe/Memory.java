@@ -19,6 +19,7 @@ public class Memory {
     private String category;
     private String imageResource;
     private String id;
+    private String smallImageResource;
 
     public Memory(String description){
         this.description = description;
@@ -64,16 +65,26 @@ public class Memory {
     }
 
     public String getCategory() {
+        //if the category is null set it as a quick memory
+        if(category == null){
+            category = "Quick Memory";
+        }
         return category;
     }
 
-    public Memory(String description, String memoryDate, String location, String imageResource, String title, String category){
-       this.description = description;
-        this.category = category;
+    public String getSmallImageResource() {
+        if(smallImageResource == null){
+            smallImageResource = "none";
+        }
+        return smallImageResource;
+    }
 
-       this.memoryDate = memoryDate;
-       this.location = location;
-       this.imageResource = imageResource;
-        this.title = title;
+    public Memory(String description, String memoryDate, String location, String imageResource, String title, String category, String smallImageResource){
+        this.description = description;
+        this.memoryDate = memoryDate;
+        this.location = location;
+        this.imageResource = imageResource;
+        this.category = category;
+        this.smallImageResource = smallImageResource;
    }
 }
