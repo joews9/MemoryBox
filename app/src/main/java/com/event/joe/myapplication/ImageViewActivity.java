@@ -21,14 +21,7 @@ public class ImageViewActivity extends AppCompatActivity {
         ImageView iv = (ImageView)findViewById(R.id.ivFullImage);
         File f = new File(imageResource);
         iv.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+        iv.setRotation(iv.getRotation() + 90);
 
-        ImageView rotateButton = (ImageView)findViewById(R.id.ivRotate);
-        rotateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImageView iv = (ImageView)findViewById(R.id.ivFullImage);
-                iv.setRotation(iv.getRotation() + 90);
-            }
-        });
     }
 }

@@ -80,10 +80,14 @@ public class SignUpActivity extends AppCompatActivity {
                     }
 
                 }
+            }
+        });
 
-
-
-
+       TextView alreadyAccount = (TextView)findViewById(R.id.link_login);
+        alreadyAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

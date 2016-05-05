@@ -45,9 +45,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_LOGIN = "table_login";
     private static final String ACTIVITY = "activity";
     private static final String ID = "id";
+    private static final String USER_ID = "userID";
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
-    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "username TEXT," + "category TEXT, smallImageURL TEXT )";
+    private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "userID TEXT," + "category TEXT, smallImageURL TEXT )";
 
 
     public MySQLiteHelper(Context context) {
@@ -134,6 +135,23 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         return currentPassword;
     }
+    public String getUserID(String currentUsername) {
+        String userID = null;
+        System.out.println("SQUSERNAME*****" + currentUsername);
+        int x = 1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id FROM " + TABLE_LOGIN + " WHERE username = '" + currentUsername + "'", null);
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                userID = cursor.getString(cursor.getColumnIndex(ID));
+                x = x + 1;
+                cursor.moveToNext();
+            }
+        }
+
+        return userID;
+    }
 
     public List<String> getAllUsernames() {
         int x = 1;
@@ -158,6 +176,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String title = memory.getTitle();
         String smallImage = memory.getSmallImageResource();
         String imageURL = memory.getImageResource();
+        String userID = memory.getUserID();
 
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -167,6 +186,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(SMALLIMAGE, smallImage);
         values.put(LOCATION, location);
         values.put(IMAGE_URL, imageURL);
+        values.put(USER_ID, userID);
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
@@ -178,12 +198,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 
     }
-    public List<Memory> getAllMemories() {
+    public List<Memory> getAllMemories(String userID) {
         List<Memory> memories = new ArrayList<Memory>();
         int x = 1;
         int i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category, smallImageURL, description  FROM " + TABLE_NAME + " ORDER BY date DESC", null);
+        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category, smallImageURL, description, userID  FROM " + TABLE_NAME + " WHERE userID = " + userID + "  ORDER BY date DESC", null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
 
@@ -195,8 +215,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
                 String memorySmallImage = cursor.getString(cursor.getColumnIndex(SMALLIMAGE));
                 String memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
+                String memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
 
-                Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage);
+                Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage, memoryUserID);
                 memory.setId(memoryId);
                 memories.add(memory);
                 i++;

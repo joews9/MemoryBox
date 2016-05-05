@@ -14,4 +14,8 @@
         <item>Family</item>
         <item>Other</item>
     </string-array>
+
+    <string name="title_activity_view_image">ViewImageActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

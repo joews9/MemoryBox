@@ -3,6 +3,7 @@ package com.event.joe.myapplication;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -50,8 +51,8 @@ public class MainActivity extends AppCompatActivity
 
         Menu menu = navigationView.getMenu();
         MenuItem nav_username = menu.findItem(R.id.currentName);
-        String username = getIntent().getExtras().getString("username");
-        nav_username.setTitle(username);
+        String name = getIntent().getExtras().getString("name");
+        nav_username.setTitle(name);
     }
 
     @Override
@@ -120,6 +121,11 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
         } else if (id == R.id.logOut) {
             Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+            SharedPreferences.Editor editor = pref.edit();
+            editor.remove("name");
+            editor.remove("username");
+            editor.commit();
             startActivity(intent);
             finish();
         }

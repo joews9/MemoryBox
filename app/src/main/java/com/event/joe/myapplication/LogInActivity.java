@@ -1,6 +1,7 @@
 package com.event.joe.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,68 +23,88 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        final Button button =  (Button)findViewById(R.id.btn_login);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //sign in logic
-                EditText etUsername = (EditText) findViewById(R.id.input_username);
-                EditText etPassword = (EditText) findViewById(R.id.input_password);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
 
-                String password = etPassword.getText().toString();
-                String username = etUsername.getText().toString();
+        if (pref.getString("username", null) != null) {
+            Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            String name = pref.getString("name", "None Found");
+            bundle.putString("name", name);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        }else {
+            final Button button = (Button) findViewById(R.id.btn_login);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //sign in logic
+                    EditText etUsername = (EditText) findViewById(R.id.input_username);
+                    EditText etPassword = (EditText) findViewById(R.id.input_password);
 
-                sqLiteHelper = new MySQLiteHelper(LogInActivity.this);
-                List<String> usernames = sqLiteHelper.getAllUsernames();
-                boolean userNameFound = false;
+                    String password = etPassword.getText().toString();
+                    String username = etUsername.getText().toString();
 
-                for (int i = 0; i < usernames.size(); i++) {
-                    if (usernames.get(i).equals(username)) {
-                        userNameFound = true;
-                        break;
+                    sqLiteHelper = new MySQLiteHelper(LogInActivity.this);
+                    List<String> usernames = sqLiteHelper.getAllUsernames();
+                    boolean userNameFound = false;
+
+                    for (int i = 0; i < usernames.size(); i++) {
+                        if (usernames.get(i).equals(username)) {
+                            userNameFound = true;
+                            break;
+                        }
                     }
-                }
 
-                if (username.length() < 1 || password.length() < 1) {
-                    Toast.makeText(LogInActivity.this, "Not all fields have been filled in", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (userNameFound) {
-                        String passwordCurrent = sqLiteHelper.getPassword(username);
-                        if (passwordCurrent.equals(password)) {
-                                sqLiteHelper.deactivateSessions();
-                                sqLiteHelper.setActive(username);
+                    if (username.length() < 1 || password.length() < 1) {
+                        Toast.makeText(LogInActivity.this, "Not all fields have been filled in", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (userNameFound) {
+                            String passwordCurrent = sqLiteHelper.getPassword(username);
+                            if (passwordCurrent.equals(password)) {
                                 HashMap<String, String> currentUser = sqLiteHelper.getUserDetails(username);
                                 String firstName = currentUser.get("firstName");
                                 String lastName = currentUser.get("lastName");
+                                addToSharedPreferences(username, firstName, lastName);
                                 Intent intent = new Intent(LogInActivity.this, MainActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putString("username" , firstName + " " + lastName);
+                                bundle.putString("name", firstName + " " + lastName);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 finish();
 
+                            } else {
+                                Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
+                            etUsername.getText().clear();
+                            etPassword.getText().clear();
                         }
-                    } else {
-                        Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
-                        etUsername.getText().clear();
-                        etPassword.getText().clear();
+
                     }
 
                 }
+            });
 
-            }
-        });
+            TextView login = (TextView) findViewById(R.id.link_signup);
+            login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(LogInActivity.this, SignUpActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
 
-        TextView login = (TextView)findViewById(R.id.link_signup);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LogInActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
-
+    public void addToSharedPreferences(String username, String firstName, String lastName){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("username", username);
+        Toast.makeText(LogInActivity.this, firstName + lastName, Toast.LENGTH_SHORT).show();
+        editor.putString("name", firstName + " " + lastName);
+        editor.commit();
     }
 }

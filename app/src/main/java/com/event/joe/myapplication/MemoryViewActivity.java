@@ -1,8 +1,14 @@
 package com.event.joe.myapplication;
 
+import android.app.VoiceInteractor;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -49,16 +55,21 @@ public class MemoryViewActivity extends AppCompatActivity {
             memoryImage.setImageResource(R.drawable.ic_quick_memory);
         }else{
             File f = new File(imageResource);
+            Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
             memoryImage.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
             memoryImage.setRotation(memoryImage.getRotation() + 90);
 
             memoryImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MemoryViewActivity.this, ImageViewActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("imagePath", imageResource);
-                    intent.putExtras(bundle);
+//                    Intent intent = new Intent(MemoryViewActivity.this, ImageViewActivity.class);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("imagePath", imageResource);
+//                    intent.putExtras(bundle);
+//                    startActivity(intent);
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse(imageResource), "image/*");
                     startActivity(intent);
                 }
             });

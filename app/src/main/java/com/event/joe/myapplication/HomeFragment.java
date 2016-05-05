@@ -2,8 +2,10 @@ package com.event.joe.myapplication;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -36,12 +38,24 @@ public class HomeFragment extends Fragment {
     private static final String MEMORY_IMAGE = "memoryImage";
     private static final String MEMORY_TITLE = "memoryTitle";
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String username;
+    String userID;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.timeline_layout, container, false);
+        pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
+        username = pref.getString("username", null);
+        System.out.println("USERNAME********************" + username);
+        //TODO: Get the null object reference working
         mySQLiteHelper = new MySQLiteHelper(getActivity());
-        list = mySQLiteHelper.getAllMemories();
+        userID = mySQLiteHelper.getUserID(username);
+        mySQLiteHelper = new MySQLiteHelper(getActivity());
+        list = mySQLiteHelper.getAllMemories(userID);
         setList();
         Button btnQuickPost = (Button) view.findViewById(R.id.btnAddTimeline);
         btnQuickPost.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +64,7 @@ public class HomeFragment extends Fragment {
                 //get quick memory text from the edit text
                 EditText quickMemory = (EditText) view.findViewById(R.id.etQuickPost);
                 String quickMemoryText = quickMemory.getText().toString();
-                Memory memory = new Memory(quickMemoryText);
+                Memory memory = new Memory(quickMemoryText, userID);
                 mySQLiteHelper.saveMemory(memory);
                 quickMemory.getText().clear();
                 setList();
@@ -63,7 +77,7 @@ public class HomeFragment extends Fragment {
     public void setList() {
         ListView lv = (ListView)view.findViewById(R.id.list_timeline);
         list.clear();
-        list = mySQLiteHelper.getAllMemories();
+        list = mySQLiteHelper.getAllMemories(userID);
         MemoryListAdapter eventAdapter = new MemoryListAdapter(getActivity(),R.layout.memory_list_cell);
         lv.setAdapter(eventAdapter);
 
@@ -92,7 +106,7 @@ public class HomeFragment extends Fragment {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                List<Memory> list = mySQLiteHelper.getAllMemories();
+                List<Memory> list = mySQLiteHelper.getAllMemories(userID);
                 Memory memory = list.get(position);
                 idPosition = memory.getId();
                 AlertDialog diaBox = AskOption();

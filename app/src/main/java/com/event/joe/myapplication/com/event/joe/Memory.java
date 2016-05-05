@@ -19,10 +19,17 @@ public class Memory {
     private String category;
     private String imageResource;
     private String id;
-    private String smallImageResource;
 
-    public Memory(String description){
+    public String getUserID() {
+        return userID;
+    }
+
+    private String smallImageResource;
+    private String userID;
+
+    public Memory(String description, String userID){
         this.description = description;
+        this.userID = userID;
         this.title = description.trim();
     }
 
@@ -79,12 +86,14 @@ public class Memory {
         return smallImageResource;
     }
 
-    public Memory(String description, String memoryDate, String location, String imageResource, String title, String category, String smallImageResource){
+    public Memory(String description, String memoryDate, String location, String imageResource, String title, String category, String smallImageResource, String userID){
         this.description = description;
         this.memoryDate = memoryDate;
         this.location = location;
         this.imageResource = imageResource;
         this.category = category;
         this.smallImageResource = smallImageResource;
+        this.title = title;
+        this.userID = userID;
    }
 }

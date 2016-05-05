@@ -3,6 +3,7 @@
     package="com.event.joe.myapplication">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
@@ -28,7 +29,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MemoryViewActivity" />
-        <activity android:name=".ImageViewActivity"></activity>
+        <activity android:name=".ImageViewActivity" />
+        <activity
+            android:name=".ViewImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_view_image"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

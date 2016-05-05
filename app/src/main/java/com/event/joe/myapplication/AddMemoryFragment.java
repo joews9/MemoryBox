@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -84,14 +85,19 @@ public class AddMemoryFragment extends Fragment{
         addMemory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MySQLiteHelper mySQLiteHelper = new MySQLiteHelper(getActivity());
                 textDescription = description.getText().toString();
                 textLocation = location.getText().toString();
                 textTitle = title.getText().toString();
                 String textCategory = category.getSelectedItem().toString();
                 String memoryDate = dateItem.getText().toString();
 
-                Memory memory = new Memory(textDescription, memoryDate, textLocation, imageResource, textTitle, textCategory, imageResource);
-                MySQLiteHelper mySQLiteHelper = new MySQLiteHelper(getActivity());
+                //get user from shared preferences
+                SharedPreferences pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = pref.edit();
+                String username = pref.getString("username", "None");
+                String userID = mySQLiteHelper.getUserID(username);
+                Memory memory = new Memory(textDescription, memoryDate, textLocation, imageResource, textTitle, textCategory, imageResource, userID);
                 mySQLiteHelper.saveMemory(memory);
 
                 FragmentManager fragmentManager = getFragmentManager();
@@ -119,7 +125,6 @@ public class AddMemoryFragment extends Fragment{
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        Toast.makeText(getActivity(), imageResource, Toast.LENGTH_SHORT).show();
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -130,7 +135,10 @@ public class AddMemoryFragment extends Fragment{
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        imageResource = "sdcard/pictures/" + imageFileName +"-1483040060" + ".jpg";
+        String fileName = image.getAbsolutePath();
+//        imageResource = "sdcard/pictures/" + imageFileName +"-1483040060" + ".jpg";
+        imageResource = fileName;
+        Toast.makeText(getActivity(), imageResource, Toast.LENGTH_SHORT).show();
         return image;
     }
 
