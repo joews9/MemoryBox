@@ -68,21 +68,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXSISTS table_login");
         onCreate(db);
     }
-
-    public void deactivateSessions() {
-        String deleteQuery = "UPDATE " + TABLE_LOGIN + " SET activity = 'inactive'";
-        db = this.getWritableDatabase();
-        db.execSQL(deleteQuery);
-
-    }
-
-    public void setActive(String username) {
-        String deleteQuery = "UPDATE " + TABLE_LOGIN + " SET activity = 'active' WHERE username = '" + username + "'";
-        db = this.getWritableDatabase();
-        db.execSQL(deleteQuery);
-
-    }
-
     public HashMap<String, String> getUserDetails(String username) {
         HashMap<String, String> loggedInUserDetails = new HashMap<String, String>();
         int x = 1;
@@ -162,6 +147,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String smallImage = memory.getSmallImageResource();
         String imageURL = memory.getImageResource();
         String userID = memory.getUserID();
+        String category = memory.getCategory();
 
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -172,6 +158,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(LOCATION, location);
         values.put(IMAGE_URL, imageURL);
         values.put(USER_ID, userID);
+        values.put(CATEGORY, category);
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
@@ -180,8 +167,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String deleteQuery = "DELETE FROM " + TABLE_NAME + " WHERE id= " + memoryID;
         db = this.getWritableDatabase();
         db.execSQL(deleteQuery);
+    }
 
-
+    public void deleteAccount(String userID) {
+        String deleteQuery = "DELETE FROM " + TABLE_LOGIN + " WHERE id = " + userID;
+        String deleteMemoriesQuery = "DELETE FROM " + TABLE_NAME + " WHERE userID = " + userID;
+        db = this.getWritableDatabase();
+        db.execSQL(deleteQuery);
     }
     public List<Memory> getAllMemories(String userID) {
         List<Memory> memories = new ArrayList<Memory>();
@@ -243,6 +235,36 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
         return memories;
     }
+    public List<Memory> getAllMemoriesCategory(String userID, String category) {
+        List<Memory> memories = new ArrayList<Memory>();
+        int x = 1;
+        int i = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category, smallImageURL, description, userID  FROM " + TABLE_NAME + " WHERE userID = " + userID + " AND category =  '" + category + "' ORDER BY date ASC", null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+
+                String memoryTitle = cursor.getString(cursor.getColumnIndex(TITLE));
+                String memoryDate = cursor.getString(cursor.getColumnIndex(DATE));
+                String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
+                String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
+                String memoryId = cursor.getString(cursor.getColumnIndex(ID));
+                String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
+                String memorySmallImage = cursor.getString(cursor.getColumnIndex(SMALLIMAGE));
+                String memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
+                String memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+
+                Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage, memoryUserID);
+                memory.setId(memoryId);
+                memories.add(memory);
+                i++;
+                x = x + 1;
+                cursor.moveToNext();
+
+            }
+        }
+        return memories;
+    }
 
     public void editCurrentMemory(Memory memory){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -255,6 +277,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         try {
             String strSQL = "UPDATE " + TABLE_NAME + " SET " + titleQuery +  seperator + dateQuery + seperator + descriptionQuery + seperator + locationQuery +  " WHERE id = " + memory.getId();
+            db.execSQL(strSQL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editUserDetails(String firstName, String lastName, String userID){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            String strSQL = "UPDATE " + TABLE_LOGIN + " SET firstName = '" + firstName +  "', lastName = '" + lastName + "'  WHERE id = " + userID;
             db.execSQL(strSQL);
         } catch (SQLException e) {
             e.printStackTrace();

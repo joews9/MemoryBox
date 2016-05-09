@@ -8,11 +8,23 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="spinnerCategorys">
-        <item>New Item</item>
+        <item>Academic</item>
         <item>Achievement</item>
+        <item>Relationship</item>
+        <item>New Item</item>
         <item>Secret</item>
         <item>Family</item>
         <item>Other</item>
+    </string-array>
+
+    <string-array name="spinnerAllcategories">
+        <item>Academic Memories</item>
+        <item>Achievement Memories</item>
+        <item>Secret Memories</item>
+        <item>Relationship Memories</item>
+        <item>Family Memories</item>
+        <item>Quick Memories</item>
+        <item>Other Memories</item>
     </string-array>
 
     <string name="title_activity_view_image">ViewImageActivity</string>

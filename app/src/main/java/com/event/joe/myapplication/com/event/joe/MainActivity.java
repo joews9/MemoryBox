@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     private static final String MEMORY_TITLE = "memoryTitle";
     private static final String MEMORY_ID = "memoryID";
 
+    NavigationView navigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.fragmentPlaceHolder, hf);
         fragmentTransaction.commit();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
 /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
@@ -134,6 +136,10 @@ public class MainActivity extends AppCompatActivity
             editor.commit();
             startActivity(intent);
             finish();
+        } else if (id == R.id.currentName) {
+            UserDetailsFragment udf = new UserDetailsFragment();
+            fragmentTransaction.replace(R.id.fragmentPlaceHolder, udf);
+            fragmentTransaction.commit();
         }
 
 
@@ -172,5 +178,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void viewMemory() {
 
+    }
+
+    @Override
+    public void setNewName(String name) {
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_username = menu.findItem(R.id.currentName);
+        nav_username.setTitle(name);
     }
 }

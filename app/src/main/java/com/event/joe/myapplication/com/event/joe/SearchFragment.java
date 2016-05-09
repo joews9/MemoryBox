@@ -1,27 +1,28 @@
 package com.event.joe.myapplication.com.event.joe;
 
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.Toast;
+        import android.app.Activity;
+        import android.app.AlertDialog;
+        import android.app.Fragment;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.os.Bundle;
+        import android.support.annotation.Nullable;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.AdapterView;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.ListView;
+        import android.widget.RadioButton;
+        import android.widget.Toast;
 
-import com.event.joe.myapplication.R;
-import com.event.joe.myapplication.listadapter.MemoryListAdapter;
-import com.event.joe.myapplication.listadapter.MemoryListDetailProvider;
+        import com.event.joe.myapplication.R;
+        import com.event.joe.myapplication.listadapter.MemoryListAdapter;
+        import com.event.joe.myapplication.listadapter.MemoryListDetailProvider;
 
-import java.util.List;
+        import java.util.List;
 
 /**
  * Created by Joe Millership on 27/03/2016.
@@ -54,7 +55,6 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.search_layout, container, false);
-
         Button btnSearch = (Button)view.findViewById(R.id.btnSearch);
         searchTerm = (EditText)view.findViewById(R.id.etSearchTerm);
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -148,5 +148,11 @@ public class SearchFragment extends Fragment {
                 .create();
         return myQuittingDialogBox;
 
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onMemorySetListener = (OnMemorySetListener)activity;
     }
 }
