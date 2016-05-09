@@ -1,18 +1,11 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
-import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,22 +14,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.event.joe.myapplication.com.event.joe.Memory;
-
-import org.w3c.dom.Text;
+import com.event.joe.myapplication.R;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by Joe Millership on 27/03/2016.
@@ -95,8 +83,7 @@ public class AddMemoryFragment extends Fragment{
                 //get user from shared preferences
                 SharedPreferences pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
                 SharedPreferences.Editor editor = pref.edit();
-                String username = pref.getString("username", "None");
-                String userID = mySQLiteHelper.getUserID(username);
+                String userID = pref.getString("userID", "None");
                 Memory memory = new Memory(textDescription, memoryDate, textLocation, imageResource, textTitle, textCategory, imageResource, userID);
                 mySQLiteHelper.saveMemory(memory);
 

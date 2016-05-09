@@ -1,4 +1,4 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,22 +8,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.event.joe.myapplication.R;
+
 import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
-///TODO: Logged In Session Shared Preferences
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
-    private String passwordConfirm;
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etUsername;
     private EditText etPassword;
     private EditText etConfirmPassword;
-    private Button btnCreateAccount;
-    private TextView tvLogin;
     MySQLiteHelper sqLiteHelper;
 
     @Override
@@ -35,22 +29,19 @@ public class SignUpActivity extends AppCompatActivity {
         etUsername = (EditText) findViewById(R.id.su_username);
         etPassword = (EditText) findViewById(R.id.su_password);
         etConfirmPassword = (EditText) findViewById(R.id.su_confirmpassword);
-        btnCreateAccount = (Button) findViewById(R.id.btn_create);
-        tvLogin = (TextView) findViewById(R.id.link_login);
-
+        Button btnCreateAccount = (Button) findViewById(R.id.btn_create);
 
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                firstName = etFirstName.getText().toString();
-                lastName = etLastName.getText().toString();
-                username = etUsername.getText().toString();
-                password = etPassword.getText().toString();
-                passwordConfirm = etConfirmPassword.getText().toString();
+                String firstName = etFirstName.getText().toString();
+                String lastName = etLastName.getText().toString();
+                String username = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
+                String passwordConfirm = etConfirmPassword.getText().toString();
 
                 sqLiteHelper = new MySQLiteHelper(SignUpActivity.this);
-
 
                 //Username check logic and user add
                 List<String> usernames = sqLiteHelper.getAllUsernames();

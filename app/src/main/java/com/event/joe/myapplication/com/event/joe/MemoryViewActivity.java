@@ -1,4 +1,4 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
 import android.app.VoiceInteractor;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.event.joe.myapplication.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;

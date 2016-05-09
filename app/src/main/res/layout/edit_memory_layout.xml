@@ -1,46 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
-        android:text="Add a Memory"
+        android:text="Edit this Memory"
         android:textSize="30dp"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
         android:textColor="#9acc55"
         android:gravity="center"
         android:layout_marginBottom="20dp"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#9acc55"
+        android:text="Date"/>
 
     <EditText
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:hint="Tap to add date"
-        android:id="@+id/memory_date"
+        android:id="@+id/edit_memory_date"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#9acc55"
+        android:text="Title"/>
 
     <EditText
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
-        android:id="@+id/memory_title"
+        android:id="@+id/edit_memory_title"
         android:hint="Add a title"
         android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#9acc55"
+        android:text="Description"/>
     <EditText
         android:layout_marginLeft="10dp"
-        android:id="@+id/memory_description"
+        android:id="@+id/edit_memory_description"
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:hint="Add a description"
         android:gravity="top"
-        android:layout_height="100dp" />
+        android:layout_height="60dp" />
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#9acc55"
+        android:text="Location"/>
     <EditText
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:id="@+id/memory_location"
+        android:id="@+id/edit_memory_location"
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:hint="Add a location"
@@ -74,6 +104,7 @@
         android:layout_width="wrap_content"
         android:text="Choose a category?"
         android:layout_marginLeft="10dp"
+        android:textColor="#9acc55"
         android:layout_height="wrap_content" />
     <Spinner
         android:layout_width="match_parent"
@@ -83,12 +114,28 @@
         android:textSize="15sp"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
-        android:id="@+id/spinnerCat"
+        android:id="@+id/edit_spinnerCat"
         android:entries="@array/spinnerCategorys"/>
-    <Button
-        android:layout_width="match_parent"
-        android:text="Add Memory"
-        android:id="@+id/btnAddMemory"
-        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="match_parent"
+            android:text="Save Memory"
+            android:id="@+id/btnEditMemory"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/btnCancelEdit"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

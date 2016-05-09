@@ -1,39 +1,39 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.event.joe.myapplication.R;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class LogInActivity extends AppCompatActivity {
     MySQLiteHelper sqLiteHelper;
+    HashMap<String, String> currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
-        SharedPreferences.Editor editor = pref.edit();
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+            SharedPreferences.Editor editor = pref.edit();
 
-        if (pref.getString("username", null) != null) {
-            Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-            Bundle bundle = new Bundle();
-            String name = pref.getString("name", "None Found");
-            bundle.putString("name", name);
-            intent.putExtras(bundle);
-            startActivity(intent);
-            finish();
+            if (pref.getString("username", null) != null) {
+                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                String name = pref.getString("name", "None Found");
+                bundle.putString("name", name);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
         }else {
             final Button button = (Button) findViewById(R.id.btn_login);
             button.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +63,7 @@ public class LogInActivity extends AppCompatActivity {
                         if (userNameFound) {
                             String passwordCurrent = sqLiteHelper.getPassword(username);
                             if (passwordCurrent.equals(password)) {
-                                HashMap<String, String> currentUser = sqLiteHelper.getUserDetails(username);
+                                currentUser = sqLiteHelper.getUserDetails(username);
                                 String firstName = currentUser.get("firstName");
                                 String lastName = currentUser.get("lastName");
                                 addToSharedPreferences(username, firstName, lastName);
@@ -102,7 +102,9 @@ public class LogInActivity extends AppCompatActivity {
     public void addToSharedPreferences(String username, String firstName, String lastName){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
+        sqLiteHelper = new MySQLiteHelper(LogInActivity.this);
         editor.putString("username", username);
+        editor.putString("userID", currentUser.get("userID"));
         Toast.makeText(LogInActivity.this, firstName + lastName, Toast.LENGTH_SHORT).show();
         editor.putString("name", firstName + " " + lastName);
         editor.commit();

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.event.joe.myapplication.ImageViewActivity">
+    tools:context=".com.event.joe.ImageViewActivity">
 
     <ImageView
         android:layout_width="match_parent"

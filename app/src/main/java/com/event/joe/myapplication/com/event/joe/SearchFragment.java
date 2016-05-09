@@ -1,8 +1,7 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,8 +14,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.Toast;
 
-import com.event.joe.myapplication.com.event.joe.Memory;
+import com.event.joe.myapplication.R;
 import com.event.joe.myapplication.listadapter.MemoryListAdapter;
 import com.event.joe.myapplication.listadapter.MemoryListDetailProvider;
 
@@ -25,11 +26,15 @@ import java.util.List;
 /**
  * Created by Joe Millership on 27/03/2016.
  */
-public class HomeFragment extends Fragment {
-    private View view;
+public class SearchFragment extends Fragment {
+    String test;
+    ListView lv;
+    View view;
     private String idPosition;
     private MySQLiteHelper mySQLiteHelper;
     private List<Memory> list;
+    OnMemorySetListener onMemorySetListener;
+    Memory memory;
 
     private static final String MEMORY_DATE = "memoryDate";
     private static final String MEMORY_CATEGORY = "memoryCategory";
@@ -42,42 +47,38 @@ public class HomeFragment extends Fragment {
     SharedPreferences.Editor editor;
     String username;
     String userID;
+    EditText searchTerm;
+    private String searchTermText;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.timeline_layout, container, false);
-        pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
-        editor = pref.edit();
-        username = pref.getString("username", null);
-        System.out.println("USERNAME********************" + username);
-        //TODO: Get the null object reference working
-        mySQLiteHelper = new MySQLiteHelper(getActivity());
-        userID = mySQLiteHelper.getUserID(username);
-        mySQLiteHelper = new MySQLiteHelper(getActivity());
-        list = mySQLiteHelper.getAllMemories(userID);
-        setList();
-        Button btnQuickPost = (Button) view.findViewById(R.id.btnAddTimeline);
-        btnQuickPost.setOnClickListener(new View.OnClickListener() {
+        view = inflater.inflate(R.layout.search_layout, container, false);
+
+        Button btnSearch = (Button)view.findViewById(R.id.btnSearch);
+        searchTerm = (EditText)view.findViewById(R.id.etSearchTerm);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //get quick memory text from the edit text
-                EditText quickMemory = (EditText) view.findViewById(R.id.etQuickPost);
-                String quickMemoryText = quickMemory.getText().toString();
-                Memory memory = new Memory(quickMemoryText, userID);
-                mySQLiteHelper.saveMemory(memory);
-                quickMemory.getText().clear();
-                setList();
+                searchTermText = searchTerm.getText().toString();
+                pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                editor = pref.edit();
+                userID = pref.getString("userID", "none");
+                mySQLiteHelper = new MySQLiteHelper(getActivity());
+                list = mySQLiteHelper.getAllMemoriesSearch(userID, searchTermText);
+                if (list.isEmpty()){
+                    Toast.makeText(getActivity(), "No Memories Found", Toast.LENGTH_SHORT).show();
+                }
+                setList(searchTermText);
             }
         });
-
         return view;
     }
 
-    public void setList() {
-        ListView lv = (ListView)view.findViewById(R.id.list_timeline);
+    public void setList(String searchTerm) {
+        ListView lv = (ListView)view.findViewById(R.id.searchList);
         list.clear();
-        list = mySQLiteHelper.getAllMemories(userID);
+        list = mySQLiteHelper.getAllMemoriesSearch(userID, searchTerm);
         MemoryListAdapter eventAdapter = new MemoryListAdapter(getActivity(),R.layout.memory_list_cell);
         lv.setAdapter(eventAdapter);
 
@@ -90,7 +91,7 @@ public class HomeFragment extends Fragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Memory memory = list.get(position);
+                memory = list.get(position);
                 Intent intent = new Intent(getActivity(), MemoryViewActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(MEMORY_DATE, memory.getMemoryDate());
@@ -107,7 +108,7 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 List<Memory> list = mySQLiteHelper.getAllMemories(userID);
-                Memory memory = list.get(position);
+                memory = list.get(position);
                 idPosition = memory.getId();
                 AlertDialog diaBox = AskOption();
                 diaBox.show();
@@ -118,15 +119,23 @@ public class HomeFragment extends Fragment {
     private AlertDialog AskOption() {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getActivity())
                 //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete this Memory?")
+                .setTitle("Edit")
+                .setMessage("What would you like to do with this memory?")
 
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         mySQLiteHelper.deleteMemory(idPosition);
-                        setList();
+                        setList(searchTermText);
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNeutralButton("Edit", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        onMemorySetListener.editMemory(memory);
                         dialog.dismiss();
                     }
 

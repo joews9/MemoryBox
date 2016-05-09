@@ -1,4 +1,4 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

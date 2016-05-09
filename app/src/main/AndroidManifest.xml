@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LogInActivity">
+        <activity android:name=".com.event.joe.LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,14 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".com.event.joe.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".MemoryViewActivity" />
-        <activity android:name=".ImageViewActivity" />
+        <activity android:name=".com.event.joe.SignUpActivity" />
+        <activity android:name=".com.event.joe.MemoryViewActivity" />
+        <activity android:name=".com.event.joe.ImageViewActivity" />
         <activity
-            android:name=".ViewImageActivity"
+            android:name=".com.event.joe.ViewImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_view_image"
             android:theme="@style/FullscreenTheme"></activity>

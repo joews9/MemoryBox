@@ -1,8 +1,9 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -86,16 +87,18 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         HashMap<String, String> loggedInUserDetails = new HashMap<String, String>();
         int x = 1;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + "firstName, lastName FROM " + TABLE_LOGIN + " WHERE username = '" + username + "'", null);
+        Cursor cursor = db.rawQuery("SELECT " + "firstName, lastName, id FROM " + TABLE_LOGIN + " WHERE username = '" + username + "'", null);
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
 
                 String firstName = cursor.getString(cursor.getColumnIndex(FIRSTNAME));
                 String lastName = cursor.getString(cursor.getColumnIndex(LASTNAME));
+                String userID = cursor.getString(cursor.getColumnIndex(ID));
 
                 loggedInUserDetails.put("firstName", firstName);
                 loggedInUserDetails.put("lastName", lastName);
+                loggedInUserDetails.put("userID", userID);
 
                 x = x + 1;
                 cursor.moveToNext();
@@ -135,24 +138,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         return currentPassword;
     }
-    public String getUserID(String currentUsername) {
-        String userID = null;
-        System.out.println("SQUSERNAME*****" + currentUsername);
-        int x = 1;
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id FROM " + TABLE_LOGIN + " WHERE username = '" + currentUsername + "'", null);
-
-        if (cursor.moveToFirst()) {
-            while (cursor.isAfterLast() == false) {
-                userID = cursor.getString(cursor.getColumnIndex(ID));
-                x = x + 1;
-                cursor.moveToNext();
-            }
-        }
-
-        return userID;
-    }
-
     public List<String> getAllUsernames() {
         int x = 1;
         List<String> List = new ArrayList<String>();
@@ -227,6 +212,53 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         }
         return memories;
+    }
+    public List<Memory> getAllMemoriesSearch(String userID, String description) {
+        List<Memory> memories = new ArrayList<Memory>();
+        int x = 1;
+        int i = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category, smallImageURL, description, userID  FROM " + TABLE_NAME + " WHERE userID = " + userID + " AND description LIKE '%" + description + "%' ORDER BY date ASC", null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+
+                String memoryTitle = cursor.getString(cursor.getColumnIndex(TITLE));
+                String memoryDate = cursor.getString(cursor.getColumnIndex(DATE));
+                String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
+                String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
+                String memoryId = cursor.getString(cursor.getColumnIndex(ID));
+                String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
+                String memorySmallImage = cursor.getString(cursor.getColumnIndex(SMALLIMAGE));
+                String memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
+                String memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+
+                Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage, memoryUserID);
+                memory.setId(memoryId);
+                memories.add(memory);
+                i++;
+                x = x + 1;
+                cursor.moveToNext();
+
+            }
+        }
+        return memories;
+    }
+
+    public void editCurrentMemory(Memory memory){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String titleQuery = TITLE + " = '" + memory.getTitle() + "' ";
+        String dateQuery = DATE + " = '" + memory.getMemoryDate() + "' ";
+        String descriptionQuery = DESCRIPTION+ " = '" + memory.getDescription() + "' ";
+        String locationQuery = LOCATION + " = '" + memory.getLocation() + "' ";
+        String seperator = ", ";
+
+        try {
+            String strSQL = "UPDATE " + TABLE_NAME + " SET " + titleQuery +  seperator + dateQuery + seperator + descriptionQuery + seperator + locationQuery +  " WHERE id = " + memory.getId();
+            db.execSQL(strSQL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

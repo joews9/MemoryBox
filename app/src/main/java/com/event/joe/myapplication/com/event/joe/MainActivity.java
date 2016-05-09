@@ -1,13 +1,10 @@
-package com.event.joe.myapplication;
+package com.event.joe.myapplication.com.event.joe;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.view.menu.MenuView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,10 +16,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.event.joe.myapplication.com.event.joe.Memory;
+import com.event.joe.myapplication.R;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMemorySetListener {
+
+    private static final String MEMORY_DATE = "memoryDate";
+    private static final String MEMORY_CATEGORY = "memoryCategory";
+    private static final String MEMORY_LOCATION = "memoryLocation";
+    private static final String MEMORY_DESCRIPTION = "memoryDescription";
+    private static final String MEMORY_IMAGE = "memoryImage";
+    private static final String MEMORY_TITLE = "memoryTitle";
+    private static final String MEMORY_ID = "memoryID";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,4 +142,35 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void editMemory(Memory memory) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MemoryEditFragment mef = new MemoryEditFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(MEMORY_DATE, memory.getMemoryDate());
+        bundle.putString(MEMORY_LOCATION, memory.getLocation());
+        bundle.putString(MEMORY_CATEGORY, memory.getCategory());
+        bundle.putString(MEMORY_DESCRIPTION, memory.getDescription());
+        bundle.putString(MEMORY_IMAGE, memory.getImageResource());
+        bundle.putString(MEMORY_TITLE, memory.getTitle());
+        bundle.putString(MEMORY_ID, memory.getId());
+        mef.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragmentPlaceHolder, mef);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void editMemoryComplete() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        HomeFragment hf = new HomeFragment();
+        fragmentTransaction.replace(R.id.fragmentPlaceHolder, hf);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void viewMemory() {
+
+    }
 }
