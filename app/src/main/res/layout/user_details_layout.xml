@@ -58,6 +58,7 @@
         android:layout_width="wrap_content"
         android:textSize="20dp"
         android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         android:text="Memories: 25"
         android:id="@+id/tvNumberMemories"
         android:layout_marginTop="10dp"

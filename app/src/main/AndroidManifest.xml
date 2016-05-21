@@ -28,7 +28,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".com.event.joe.SignUpActivity" />
-        <activity android:name=".com.event.joe.MemoryViewActivity" />
+        <activity android:name=".com.event.joe.MemoryViewFragment" />
         <activity android:name=".com.event.joe.ImageViewActivity" />
         <activity
             android:name=".com.event.joe.ViewImageActivity"

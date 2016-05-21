@@ -9,7 +9,7 @@ public interface OnMemorySetListener {
 
     public void editMemoryComplete();
 
-    public void viewMemory();
-
     public void setNewName(String name);
+
+    public void viewMemoryDetails(Memory memory);
 }

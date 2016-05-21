@@ -57,19 +57,23 @@ public class SignUpActivity extends AppCompatActivity {
                 if (username.length() < 1 || password.length() < 1 || passwordConfirm.length() < 1 || firstName.length() < 1 || lastName.length() < 1) {
                     Toast.makeText(SignUpActivity.this, "Not all fields have been completed", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!passwordConfirm.equals(password)) {
-                        Toast.makeText(SignUpActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                    } else {
-                        if (userNameFound) {
-                            Toast.makeText(SignUpActivity.this, "Username Already Exists", Toast.LENGTH_SHORT).show();
-                            etUsername.getText().clear();
-                        }else{
-                            sqLiteHelper.addUser(username, password, firstName,lastName);
-                            Toast.makeText(SignUpActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
 
+                       if (!passwordConfirm.equals(password)) {
+                           Toast.makeText(SignUpActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                       } else {
+                          if (password.length() < 8 ){
+                              Toast.makeText(SignUpActivity.this, "Passwords must be at least 8 characters long", Toast.LENGTH_SHORT).show();
+                          }else {
+                              if (userNameFound) {
+                                  Toast.makeText(SignUpActivity.this, "Username Already Exists", Toast.LENGTH_SHORT).show();
+                                  etUsername.getText().clear();
+                              }else{
+                                  sqLiteHelper.addUser(username, password, firstName,lastName);
+                                  Toast.makeText(SignUpActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
+                                  finish();
+                              }
+                          }
+                   }
                 }
             }
         });

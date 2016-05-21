@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -98,7 +97,7 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 memory = list.get(position);
-                Intent intent = new Intent(getActivity(), MemoryViewActivity.class);
+                Intent intent = new Intent(getActivity(), MemoryViewFragment.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(MEMORY_DATE, memory.getMemoryDate());
                 bundle.putString(MEMORY_LOCATION, memory.getLocation());

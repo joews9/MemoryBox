@@ -77,6 +77,10 @@ public class MemoryEditFragment extends Fragment {
                 description = editDescription.getText().toString();
                 date = editDate.getText().toString();
                 location = editLocation.getText().toString();
+                category = editCategory.getSelectedItem().toString();
+                if (!category.equals("Quick Memory")) {
+                    imageResource = "Big Memory";
+                }
                 Memory memory = new Memory(description, date, location, imageResource, title, category, null, null);
                 memory.setId(memoryID);
                 mySQLiteHelper.editCurrentMemory(memory);

@@ -9,10 +9,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import com.event.joe.myapplication.com.event.joe.Memory;
+import com.scottyab.aescrypt.AESCrypt;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +36,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String IMAGE_URL = "imageURL";
     private static final String DESCRIPTION = "description";
 
+    private String memoryTitle = null;
+    private String memoryDate = null ;
+    private String memoryLocation = null;
+    private String memoryImage = null;
+    private String memoryId = null;
+    private String memoryCategory = null;
+    private String memorySmallImage = null;
+    private String memoryDescription = null;
+    private String memoryUserID = null;
+    private String firstName = null;
+    private String lastName = null;
+    private String password = null;
+
     private SQLiteDatabase db;
 
     //Login Table
@@ -50,7 +65,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
     private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "userID TEXT," + "category TEXT, smallImageURL TEXT )";
-
 
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -94,9 +108,18 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     public String addUser(String username, String password, String firstName, String lastName) {
         db = this.getWritableDatabase();
+        String passwordEncrypt = "password";
+        String beforeEncryptedPassword = password;
+        String encryptedPassword = "";
+        try {
+            encryptedPassword = AESCrypt.encrypt(passwordEncrypt, beforeEncryptedPassword);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
         ContentValues values = new ContentValues();
         values.put(USERNAME, username);
-        values.put(PASSWORD, password);
+        values.put(PASSWORD, encryptedPassword);
         values.put(ACTIVITY, "Active");
         values.put(FIRSTNAME, firstName);
         values.put(LASTNAME, lastName);
@@ -104,6 +127,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
         return "Account Added";
     }
+
+
 
     public String getPassword(String currentUsername) {
         String currentPassword = null;
@@ -140,14 +165,26 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return List;
     }
     public void saveMemory(Memory memory) {
-        String date = memory.getMemoryDate().toString();
-        String description = memory.getDescription();
-        String location = memory.getLocation();
-        String title = memory.getTitle();
-        String smallImage = memory.getSmallImageResource();
-        String imageURL = memory.getImageResource();
-        String userID = memory.getUserID();
-        String category = memory.getCategory();
+        String date = null;
+        String description = null;
+        String location = null;
+        String title = null;
+        String smallImage = null;
+        String imageURL = null;
+        String userID = null;
+        String category = null;
+        try {
+            date = AESCrypt.encrypt(KeyID.DATE.toString(), memory.getMemoryDate());
+            description = memory.getDescription();
+            location = AESCrypt.encrypt(KeyID.LOCATION.toString(), memory.getDescription());
+            title = AESCrypt.encrypt(KeyID.TITLE.toString(), memory.getTitle());
+            smallImage = AESCrypt.encrypt(KeyID.SMALL_IMAGE.toString(), memory.getSmallImageResource());
+            imageURL = AESCrypt.encrypt(KeyID.LARGE_IMAGE.toString(), memory.getImageResource());
+            userID = memory.getUserID();
+            category =  memory.getCategory();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
 
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -183,16 +220,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category, smallImageURL, description, userID  FROM " + TABLE_NAME + " WHERE userID = " + userID + "  ORDER BY date DESC", null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-
-                String memoryTitle = cursor.getString(cursor.getColumnIndex(TITLE));
-                String memoryDate = cursor.getString(cursor.getColumnIndex(DATE));
-                String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
-                String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
-                String memoryId = cursor.getString(cursor.getColumnIndex(ID));
-                String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
-                String memorySmallImage = cursor.getString(cursor.getColumnIndex(SMALLIMAGE));
-                String memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
-                String memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+                try {
+                    memoryTitle = AESCrypt.decrypt(KeyID.TITLE.toString(), cursor.getString(cursor.getColumnIndex(TITLE)));
+                    memoryDate = AESCrypt.decrypt(KeyID.DATE.toString(), cursor.getString(cursor.getColumnIndex(DATE)));
+                    memoryLocation = AESCrypt.decrypt(KeyID.LOCATION.toString(), cursor.getString(cursor.getColumnIndex(LOCATION)));
+                    memoryImage = AESCrypt.decrypt(KeyID.LARGE_IMAGE.toString(), cursor.getString(cursor.getColumnIndex(IMAGE_URL)));
+                    memoryId = cursor.getString(cursor.getColumnIndex(ID));
+                    memoryCategory =  cursor.getString(cursor.getColumnIndex(CATEGORY));
+                    memorySmallImage = AESCrypt.decrypt(KeyID.SMALL_IMAGE.toString(), cursor.getString(cursor.getColumnIndex(SMALLIMAGE)));
+                    memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
+                    memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                }
 
                 Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage, memoryUserID);
                 memory.setId(memoryId);
@@ -214,15 +254,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
 
-                String memoryTitle = cursor.getString(cursor.getColumnIndex(TITLE));
-                String memoryDate = cursor.getString(cursor.getColumnIndex(DATE));
-                String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
-                String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
-                String memoryId = cursor.getString(cursor.getColumnIndex(ID));
-                String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
-                String memorySmallImage = cursor.getString(cursor.getColumnIndex(SMALLIMAGE));
-                String memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
-                String memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+                try {
+                    memoryTitle = AESCrypt.decrypt(KeyID.TITLE.toString(), cursor.getString(cursor.getColumnIndex(TITLE)));
+                    memoryDate = AESCrypt.decrypt(KeyID.DATE.toString(), cursor.getString(cursor.getColumnIndex(DATE)));
+                    memoryLocation = AESCrypt.decrypt(KeyID.LOCATION.toString(), cursor.getString(cursor.getColumnIndex(LOCATION)));
+                    memoryImage = AESCrypt.decrypt(KeyID.LARGE_IMAGE.toString(), cursor.getString(cursor.getColumnIndex(IMAGE_URL)));
+                    memoryId = cursor.getString(cursor.getColumnIndex(ID));
+                    memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
+                    memorySmallImage = AESCrypt.decrypt(KeyID.SMALL_IMAGE.toString(), cursor.getString(cursor.getColumnIndex(SMALLIMAGE)));
+                    memoryDescription =  cursor.getString(cursor.getColumnIndex(DESCRIPTION));
+                    memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                }
 
                 Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage, memoryUserID);
                 memory.setId(memoryId);
@@ -243,16 +287,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT id, date, title, imageURL, location, category, smallImageURL, description, userID  FROM " + TABLE_NAME + " WHERE userID = " + userID + " AND category =  '" + category + "' ORDER BY date ASC", null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-
-                String memoryTitle = cursor.getString(cursor.getColumnIndex(TITLE));
-                String memoryDate = cursor.getString(cursor.getColumnIndex(DATE));
-                String memoryLocation = cursor.getString(cursor.getColumnIndex(LOCATION));
-                String memoryImage = cursor.getString(cursor.getColumnIndex(IMAGE_URL));
-                String memoryId = cursor.getString(cursor.getColumnIndex(ID));
-                String memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
-                String memorySmallImage = cursor.getString(cursor.getColumnIndex(SMALLIMAGE));
-                String memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
-                String memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+                try {
+                    memoryTitle = AESCrypt.decrypt(KeyID.TITLE.toString(), cursor.getString(cursor.getColumnIndex(TITLE)));
+                    memoryDate = AESCrypt.decrypt(KeyID.DATE.toString(), cursor.getString(cursor.getColumnIndex(DATE)));
+                    memoryLocation = AESCrypt.decrypt(KeyID.LOCATION.toString(), cursor.getString(cursor.getColumnIndex(LOCATION)));
+                    memoryImage = AESCrypt.decrypt(KeyID.LARGE_IMAGE.toString(), cursor.getString(cursor.getColumnIndex(IMAGE_URL)));
+                    memoryId = cursor.getString(cursor.getColumnIndex(ID));
+                    memoryCategory = cursor.getString(cursor.getColumnIndex(CATEGORY));
+                    memorySmallImage = AESCrypt.decrypt(KeyID.SMALL_IMAGE.toString(), cursor.getString(cursor.getColumnIndex(SMALLIMAGE)));
+                    memoryDescription = cursor.getString(cursor.getColumnIndex(DESCRIPTION));
+                    memoryUserID = cursor.getString(cursor.getColumnIndex(USER_ID));
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                }
 
                 Memory memory = new Memory(memoryDescription, memoryDate, memoryLocation, memoryImage, memoryTitle, memoryCategory, memorySmallImage, memoryUserID);
                 memory.setId(memoryId);
@@ -269,14 +316,27 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void editCurrentMemory(Memory memory){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String titleQuery = TITLE + " = '" + memory.getTitle() + "' ";
-        String dateQuery = DATE + " = '" + memory.getMemoryDate() + "' ";
-        String descriptionQuery = DESCRIPTION+ " = '" + memory.getDescription() + "' ";
-        String locationQuery = LOCATION + " = '" + memory.getLocation() + "' ";
+        try {
+            memoryTitle = AESCrypt.encrypt(KeyID.TITLE.toString(), memory.getTitle());
+            memoryDate = AESCrypt.encrypt(KeyID.DATE.toString(), memory.getMemoryDate());
+            memoryLocation = AESCrypt.encrypt(KeyID.LOCATION.toString(), memory.getLocation());
+            memoryDescription = memory.getDescription();
+            memoryCategory = memory.getCategory();
+            memoryImage = AESCrypt.encrypt(KeyID.LARGE_IMAGE.toString(), memory.getImageResource());
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
+        String titleQuery = TITLE + " = '" + memoryTitle + "' ";
+        String dateQuery = DATE + " = '" + memoryDate + "' ";
+        String descriptionQuery = DESCRIPTION+ " = '" + memoryDescription + "' ";
+        String locationQuery = LOCATION + " = '" + memoryLocation + "' ";
+        String categoryQuery = CATEGORY + " = '" + memoryCategory + "' ";
+        String imageQuery = IMAGE_URL + " = '" + memoryImage + "' ";
         String seperator = ", ";
 
         try {
-            String strSQL = "UPDATE " + TABLE_NAME + " SET " + titleQuery +  seperator + dateQuery + seperator + descriptionQuery + seperator + locationQuery +  " WHERE id = " + memory.getId();
+            String strSQL = "UPDATE " + TABLE_NAME + " SET " + titleQuery +  seperator + dateQuery + seperator + descriptionQuery + seperator + locationQuery +  seperator + categoryQuery + seperator + imageQuery +  " WHERE id = " + memory.getId();
             db.execSQL(strSQL);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -285,7 +345,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     public void editUserDetails(String firstName, String lastName, String userID){
         SQLiteDatabase db = this.getWritableDatabase();
-
         try {
             String strSQL = "UPDATE " + TABLE_LOGIN + " SET firstName = '" + firstName +  "', lastName = '" + lastName + "'  WHERE id = " + userID;
             db.execSQL(strSQL);

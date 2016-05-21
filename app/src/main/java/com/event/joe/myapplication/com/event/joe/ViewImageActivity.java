@@ -24,6 +24,7 @@ public class ViewImageActivity extends AppCompatActivity {
         View view = this.findViewById(android.R.id.content).getRootView();
 
         imageResource = getIntent().getExtras().getString("imagePath");
+        System.out.println("IMAGE*******************" + imageResource);
         File f = new File(imageResource);
         Toast.makeText(ViewImageActivity.this, f.getAbsolutePath(), Toast.LENGTH_SHORT).show();
         ImageView imageView =  (ImageView)findViewById(R.id.full_image);

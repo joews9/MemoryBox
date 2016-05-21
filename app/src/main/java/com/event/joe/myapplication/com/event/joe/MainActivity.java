@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     private static final String MEMORY_TITLE = "memoryTitle";
     private static final String MEMORY_ID = "memoryID";
 
+    private Memory memory;
     NavigationView navigationView;
 
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
+
 /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
 
 
@@ -94,12 +96,18 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        String name = getIntent().getExtras().getString("name");
-        TextView tv = (TextView) findViewById(R.id.tvName);
-        tv.setText(name);
+
         /**
          * NExt Step
          */
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (id == R.id.btnAbout) {
+            AboutFragment af = new AboutFragment();
+            fragmentTransaction.replace(R.id.fragmentPlaceHolder, af);
+            fragmentTransaction.commit();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -132,6 +140,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
             SharedPreferences.Editor editor = pref.edit();
             editor.remove("name");
+            editor.remove("userID");
             editor.remove("username");
             editor.commit();
             startActivity(intent);
@@ -176,14 +185,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void viewMemory() {
-
-    }
-
-    @Override
     public void setNewName(String name) {
         Menu menu = navigationView.getMenu();
         MenuItem nav_username = menu.findItem(R.id.currentName);
         nav_username.setTitle(name);
+    }
+
+    @Override
+    public void viewMemoryDetails(Memory memory) {
+        this.memory = memory;
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MemoryViewFragment mvf = new MemoryViewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(MEMORY_LOCATION, memory.getLocation());
+        bundle.putString(MEMORY_DATE, memory.getMemoryDate());
+        bundle.putString(MEMORY_TITLE, memory.getTitle());
+        bundle.putString(MEMORY_DESCRIPTION, memory.getDescription());
+        bundle.putString(MEMORY_IMAGE, memory.getImageResource());
+        mvf.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragmentPlaceHolder, mvf);
+        fragmentTransaction.commit();
     }
 }

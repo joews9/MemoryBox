@@ -15,7 +15,6 @@ package com.event.joe.myapplication.com.event.joe;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.ListView;
-        import android.widget.RadioButton;
         import android.widget.Toast;
 
         import com.event.joe.myapplication.R;
@@ -92,7 +91,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 memory = list.get(position);
-                Intent intent = new Intent(getActivity(), MemoryViewActivity.class);
+                Intent intent = new Intent(getActivity(), MemoryViewFragment.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(MEMORY_DATE, memory.getMemoryDate());
                 bundle.putString(MEMORY_LOCATION, memory.getLocation());

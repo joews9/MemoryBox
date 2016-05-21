@@ -11,7 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.event.joe.myapplication.R;
+import com.scottyab.aescrypt.AESCrypt;
 
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,7 +64,15 @@ public class LogInActivity extends AppCompatActivity {
                     } else {
                         if (userNameFound) {
                             String passwordCurrent = sqLiteHelper.getPassword(username);
-                            if (passwordCurrent.equals(password)) {
+                            String beforeEncryptedPassword = password;
+                            String passwordKey = "password";
+                            String encryptedPassword = "";
+                            try {
+                                encryptedPassword = AESCrypt.encrypt(passwordKey, beforeEncryptedPassword);
+                            } catch (GeneralSecurityException e) {
+                                e.printStackTrace();
+                            }
+                            if (passwordCurrent.equals(encryptedPassword)) {
                                 currentUser = sqLiteHelper.getUserDetails(username);
                                 String firstName = currentUser.get("firstName");
                                 String lastName = currentUser.get("lastName");
@@ -76,6 +86,8 @@ public class LogInActivity extends AppCompatActivity {
 
                             } else {
                                 Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();
+                                etUsername.getText().clear();
+                                etPassword.getText().clear();
                             }
                         } else {
                             Toast.makeText(LogInActivity.this, "Username or Password Incorrect", Toast.LENGTH_SHORT).show();

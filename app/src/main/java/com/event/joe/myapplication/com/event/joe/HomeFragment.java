@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Created by Joe Millership on 27/03/2016.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
     private View view;
     private String idPosition;
     private MySQLiteHelper mySQLiteHelper;
@@ -52,6 +53,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.timeline_layout, container, false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
         editor = pref.edit();
         userID = pref.getString("userID", "none");
@@ -92,16 +94,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Memory memory = list.get(position);
-                Intent intent = new Intent(getActivity(), MemoryViewActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(MEMORY_DATE, memory.getMemoryDate());
-                bundle.putString(MEMORY_LOCATION, memory.getLocation());
-                bundle.putString(MEMORY_CATEGORY, memory.getCategory());
-                bundle.putString(MEMORY_DESCRIPTION, memory.getDescription());
-                bundle.putString(MEMORY_IMAGE, memory.getImageResource());
-                bundle.putString(MEMORY_TITLE, memory.getTitle());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                onMemorySetListener.viewMemoryDetails(memory);
             }
         });
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -161,4 +154,5 @@ public class HomeFragment extends Fragment {
         }catch(Exception ex){}
 
     }
+
 }

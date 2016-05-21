@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#d3d3d3"
     android:layout_height="match_parent">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:background="#8cc63f"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content">
 
     <EditText
         android:gravity="top"
         android:layout_width="match_parent"
         android:hint="Add a quick memory..."
         android:inputType="text"
+        android:padding="10dp"
+        android:background="#ffffff"
         android:id="@+id/etQuickPost"
-        android:layout_weight="1"
-        android:layout_height="75dp"
+        android:layout_height="87dp"
         />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
+        android:text="Add"
         android:layout_marginRight="20dp"
         android:id="@+id/btnAddTimeline"
         android:layout_gravity="right" />
+</LinearLayout>
+
+
+
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_weight="30"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/list_timeline"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"
         android:layout_height="wrap_content"></ListView>
 
 
