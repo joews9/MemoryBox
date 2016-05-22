@@ -62,9 +62,9 @@ public class MemoryListAdapter extends ArrayAdapter {
             LayoutInflater inflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.memory_list_cell, parent, false);
             handler = new DataHandler();
-            handler.memoryDate = (TextView)row.findViewById(R.id.title_item);
+            handler.memoryTitle = (TextView)row.findViewById(R.id.title_item);
             handler.memoryImage = (ImageView)row.findViewById(R.id.iv_memory);
-            handler.memoryTitle = (TextView)row.findViewById(R.id.date_item);
+            handler.memoryDate = (TextView)row.findViewById(R.id.date_item);
             handler.memoryLocation = (TextView)row.findViewById(R.id.location_item);
             row.setTag(handler);
 
@@ -72,21 +72,21 @@ public class MemoryListAdapter extends ArrayAdapter {
             handler = (DataHandler)row.getTag();
         }
         MemoryListDetailProvider eventProvider = (MemoryListDetailProvider)this.getItem(position);
-        handler.memoryTitle.setText(eventProvider.getMemoryTitle());
+        String memoryTitle = eventProvider.getMemoryTitle();
+        if(memoryTitle.length() > 15 ) {
+            handler.memoryTitle.setText(memoryTitle.substring(0, 15) + "...");
+        }else {
+            handler.memoryTitle.setText(memoryTitle);
+        }
+
         handler.memoryDate.setText(eventProvider.getMemoryDate());
         handler.memoryLocation.setText(eventProvider.getMemoryLocation());
         if(eventProvider.getMemoryImage().equals("none")) {
             handler.memoryImage.setImageResource(R.drawable.ic_quick_memory);
         }else if(eventProvider.getMemoryImage().equals("big memory")){
-//            final int THUMBSIZE = 64;
-//            File f = new File(eventProvider.getMemoryImage());
-//            String path = f.getAbsolutePath();
-//            Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path),
-//                    THUMBSIZE, THUMBSIZE);
-//            handler.memoryImage.setImageBitmap(ThumbImage);
             handler.memoryImage.setImageResource(R.drawable.description);
         }else {
-            handler.memoryImage.setImageResource(R.drawable.dog);
+            handler.memoryImage.setImageResource(R.drawable.icon);
         }
         return row;
     }

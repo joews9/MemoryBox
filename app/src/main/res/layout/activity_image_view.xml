@@ -6,10 +6,21 @@
     android:orientation="vertical"
     tools:context=".com.event.joe.ImageViewActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:textColor="#9acc55"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="30dp"
+        android:layout_marginLeft="30dp"
+        android:id="@+id/tvTitle"/>
+
     <ImageView
         android:layout_width="match_parent"
         android:id="@+id/ivFullImage"
         android:scaleType="fitXY"
         android:src="@drawable/dog"
-        android:layout_height="match_parent" />
+        android:layout_height="400dp" />
 </LinearLayout>

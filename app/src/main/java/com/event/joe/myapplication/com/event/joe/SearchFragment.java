@@ -91,16 +91,8 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 memory = list.get(position);
-                Intent intent = new Intent(getActivity(), MemoryViewFragment.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(MEMORY_DATE, memory.getMemoryDate());
-                bundle.putString(MEMORY_LOCATION, memory.getLocation());
-                bundle.putString(MEMORY_CATEGORY, memory.getCategory());
-                bundle.putString(MEMORY_DESCRIPTION, memory.getDescription());
-                bundle.putString(MEMORY_IMAGE, memory.getImageResource());
-                bundle.putString(MEMORY_TITLE, memory.getTitle());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                Memory memory = list.get(position);
+                onMemorySetListener.viewMemoryDetails(memory);
             }
         });
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

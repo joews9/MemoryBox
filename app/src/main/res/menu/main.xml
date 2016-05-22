@@ -6,7 +6,10 @@
     <item
         android:title="About"
         android:id="@+id/btnAbout"
-        android:icon="@drawable/camera"
+        />
+    <item
+        android:title="Settings"
+        android:id="@+id/btnSettings"
         />
 
 </menu>

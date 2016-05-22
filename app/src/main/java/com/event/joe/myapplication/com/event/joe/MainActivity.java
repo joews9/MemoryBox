@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     private static final String MEMORY_ID = "memoryID";
 
     private Memory memory;
+    HomeFragment hf;
     NavigationView navigationView;
 
 
@@ -39,10 +40,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        hf = new HomeFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        HomeFragment hf = new HomeFragment();
         fragmentTransaction.replace(R.id.fragmentPlaceHolder, hf);
         fragmentTransaction.commit();
 
@@ -107,6 +107,10 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.fragmentPlaceHolder, af);
             fragmentTransaction.commit();
             return true;
+        } else if (id == R.id.btnSettings) {
+            SettingsFragment sf = new SettingsFragment();
+            fragmentTransaction.replace(R.id.fragmentPlaceHolder, sf);
+            fragmentTransaction.commit();
         }
 
         return super.onOptionsItemSelected(item);
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (id == R.id.navTimeline) {
-            HomeFragment hf = new HomeFragment();
+            hf = new HomeFragment();
             fragmentTransaction.replace(R.id.fragmentPlaceHolder, hf);
             fragmentTransaction.commit();
         } else if (id == R.id.navSearch) {
@@ -178,8 +182,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void editMemoryComplete() {
         FragmentManager fragmentManager = getFragmentManager();
+        hf = new HomeFragment();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        HomeFragment hf = new HomeFragment();
         fragmentTransaction.replace(R.id.fragmentPlaceHolder, hf);
         fragmentTransaction.commit();
     }
@@ -205,6 +209,7 @@ public class MainActivity extends AppCompatActivity
         bundle.putString(MEMORY_IMAGE, memory.getImageResource());
         mvf.setArguments(bundle);
         fragmentTransaction.replace(R.id.fragmentPlaceHolder, mvf);
+        fragmentTransaction.addToBackStack(hf.getClass().getName());
         fragmentTransaction.commit();
     }
 }

@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment{
 
         for(int i = 0; i <list.size(); i++) {
             Memory memory = list.get(i);
-            MemoryListDetailProvider dataProvider = new MemoryListDetailProvider (memory.getMemoryDate(), memory.getTitle(), memory.getLocation(), memory.getSmallImageResource());
+            MemoryListDetailProvider dataProvider = new MemoryListDetailProvider (memory.getTitle(), memory.getMemoryDate(), memory.getLocation(), memory.getSmallImageResource());
             eventAdapter.add(dataProvider);
         }
 

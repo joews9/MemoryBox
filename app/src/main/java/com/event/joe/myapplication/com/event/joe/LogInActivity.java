@@ -37,17 +37,18 @@ public class LogInActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
         }else {
-            final Button button = (Button) findViewById(R.id.btn_login);
+                Button button = (Button) findViewById(R.id.btn_login);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //sign in logic
+
+
                     EditText etUsername = (EditText) findViewById(R.id.input_username);
                     EditText etPassword = (EditText) findViewById(R.id.input_password);
 
                     String password = etPassword.getText().toString();
                     String username = etUsername.getText().toString();
-
                     sqLiteHelper = new MySQLiteHelper(LogInActivity.this);
                     List<String> usernames = sqLiteHelper.getAllUsernames();
                     boolean userNameFound = false;

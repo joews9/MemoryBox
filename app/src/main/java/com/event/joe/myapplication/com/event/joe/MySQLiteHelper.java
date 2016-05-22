@@ -65,7 +65,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_LOGIN_TABLE = "CREATE TABLE table_login ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT," + "firstName TEXT, " + "lastName TEXT," + "activity TEXT," + "password TEXT )";
     private static final String CREATE_MEMORY_TABLE = "CREATE TABLE table_memory ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "date TEXT," + "title TEXT," + "location TEXT," + "imageURL TEXT," + "description TEXT," + "userID TEXT," + "category TEXT, smallImageURL TEXT )";
-
+    private static final String CREATE_CATEGORIES_TABLE = "CREATE TABLE table_category ( id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT )";
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -74,13 +74,54 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_LOGIN_TABLE);
         db.execSQL(CREATE_MEMORY_TABLE);
+        db.execSQL(CREATE_CATEGORIES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXSISTS table_memory");
-        db.execSQL("DROP TABLE IF EXSISTS table_login");
+        db.execSQL("DROP TABLE IF EXISTS table_memory");
+        db.execSQL("DROP TABLE IF EXISTS table_login");
+        db.execSQL("DROP TABLE IF EXISTS table_category");
         onCreate(db);
+    }
+
+    public void addCategory(String category){
+        db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("category", category);
+            db.insert("table_category", null, values);
+            db.close();
+    }
+
+    public ArrayList<String> getCategories() {
+        ArrayList<String> categories = new ArrayList<>();
+        int x = 1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT category FROM table_category", null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                categories.add(x - 1,  cursor.getString(cursor.getColumnIndex(CATEGORY)));
+                x = x + 1;
+                cursor.moveToNext();
+            }
+        }
+        
+        ArrayList<String> standardCategories = new ArrayList<>();
+        standardCategories.add("Academic");
+        standardCategories.add("Achievement");
+        standardCategories.add("Relationship");
+        standardCategories.add("New Item");
+        standardCategories.add("Secret");
+        standardCategories.add("Family");
+        standardCategories.add("Other");
+        int y = 0;
+        
+        for(int cS = categories.size(); cS < categories.size() + standardCategories.size(); cS++){
+            categories.add(standardCategories.get(y));
+        }
+
+        return categories;
     }
     public HashMap<String, String> getUserDetails(String username) {
         HashMap<String, String> loggedInUserDetails = new HashMap<String, String>();
@@ -128,8 +169,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return "Account Added";
     }
 
-
-
     public String getPassword(String currentUsername) {
         String currentPassword = null;
 
@@ -176,7 +215,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         try {
             date = AESCrypt.encrypt(KeyID.DATE.toString(), memory.getMemoryDate());
             description = memory.getDescription();
-            location = AESCrypt.encrypt(KeyID.LOCATION.toString(), memory.getDescription());
+            location = AESCrypt.encrypt(KeyID.LOCATION.toString(), memory.getLocation());
             title = AESCrypt.encrypt(KeyID.TITLE.toString(), memory.getTitle());
             smallImage = AESCrypt.encrypt(KeyID.SMALL_IMAGE.toString(), memory.getSmallImageResource());
             imageURL = AESCrypt.encrypt(KeyID.LARGE_IMAGE.toString(), memory.getImageResource());

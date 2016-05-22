@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,6 +25,7 @@ import com.event.joe.myapplication.R;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -57,6 +59,10 @@ public class AddMemoryFragment extends Fragment{
         title = (EditText)view.findViewById(R.id.memory_title);
         location = (EditText)view.findViewById(R.id.memory_location);
         category = (Spinner)view.findViewById(R.id.spinnerCat);
+//        MySQLiteHelper mySQLiteHelper = new MySQLiteHelper(getActivity());
+//        ArrayList<String> categories = mySQLiteHelper.getCategories();
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, categories);
+//        category.setAdapter(adapter);
 
         EditText txtDate=(EditText)view.findViewById(R.id.memory_date);
         txtDate.setOnClickListener(new View.OnClickListener() {
@@ -151,4 +157,5 @@ public class AddMemoryFragment extends Fragment{
             }
         }
     }
+
 }

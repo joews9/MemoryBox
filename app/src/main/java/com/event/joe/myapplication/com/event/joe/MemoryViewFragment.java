@@ -43,6 +43,8 @@ public class MemoryViewFragment extends Fragment {
     private static final String MEMORY_IMAGE = "memoryImage";
     private static final String MEMORY_TITLE = "memoryTitle";
 
+    private String bigMemory = "Big Memory";
+    private String quickMemory = "Quick Memory";
     private View view;
 
     @Nullable
@@ -64,22 +66,28 @@ public class MemoryViewFragment extends Fragment {
         final String imageResource = getArguments().getString(MEMORY_IMAGE);
         if (imageResource.equals("none")) {
             memoryImage.setImageResource(R.drawable.ic_quick_memory);
-        } else {
+        } else if(imageResource.equals("Big Memory")){
+            memoryImage.setImageResource(R.drawable.description);
+        }else if (imageResource.length() > bigMemory.length() || imageResource.length() > quickMemory.length()){
             f = new File(imageResource);
             Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
-            memoryImage.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-            memoryImage.setRotation(memoryImage.getRotation() + -90);
-            imageURL = f.getAbsolutePath();
+            memoryImage.setImageBitmap(bitmap);
+            memoryImage.setRotation(memoryImage.getRotation() + -270);
+            imageURL = f.getAbsolutePath().substring(19, f.getAbsolutePath().length());
 
             memoryImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.parse(imageResource), "image/*");
+                    String imageSDCard = "sdcard" + imageURL;
+                    Toast.makeText(getActivity(), imageSDCard, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), ImageViewActivity.class);
+                    intent.putExtra("imageResource", f.getAbsolutePath());
+                    intent.putExtra(KeyID.TITLE.toString(), getArguments().getString(MEMORY_TITLE));
                     startActivity(intent);
                 }
             });
+        }else {
+            memoryImage.setImageResource(R.drawable.icon);
         }
 
 
@@ -96,4 +104,6 @@ public class MemoryViewFragment extends Fragment {
         });
         return view;
     }
+
+
 }
