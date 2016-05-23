@@ -95,5 +95,9 @@ public class Memory {
         this.smallImageResource = smallImageResource;
         this.title = title;
         this.userID = userID;
+
+        if (userID == null){
+            throw new NullPointerException("User Id Is Null");
+        }
    }
 }
